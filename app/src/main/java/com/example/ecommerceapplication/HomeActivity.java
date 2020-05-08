@@ -34,7 +34,6 @@ public class HomeActivity extends AppCompatActivity
     private AppBarConfiguration mAppBarConfiguration;
     private DatabaseReference ProductsRef;
     private RecyclerView recyclerView;
-    static final String PRODUCTID = "111";
     RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -86,9 +85,10 @@ public class HomeActivity extends AppCompatActivity
                             @Override
                             public void onClick(View v) {
                                 d("xxx","snb"+ model.getPid());
-                                Intent intent = new Intent(HomeActivity.this, CartActivity.class);
-                                intent.putExtra(PRODUCTID, model.getPid());
+                                Intent intent = new Intent(HomeActivity.this, EditActivity.class);
+                                intent.putExtra("pId", model.getPid());
                                 startActivity(intent);
+                                finish();
                             }
                         });
                     }
@@ -138,11 +138,13 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_cart) {
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_orders) {
 
         } else if (id == R.id.nav_categories) {
             Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_settings) {
             //TODO to setting
         } else if (id == R.id.nav_logout) {

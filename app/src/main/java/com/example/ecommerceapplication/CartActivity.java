@@ -22,10 +22,7 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        String a = getIntent().getStringExtra(HomeActivity.PRODUCTID);
-        if (a != null) {
-            d("xxx", a);
-        }
+
         textView = findViewById(R.id.test);
         happyButton = findViewById(R.id.happy_btn);
         sadButton = findViewById(R.id.sad_btn);

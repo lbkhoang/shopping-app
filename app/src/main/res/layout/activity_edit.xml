@@ -1,97 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".EditActivity">
-
-
-    <ImageView
-            android:id="@+id/product_image"
-            android:paddingTop="30dp"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:cropToPadding="false"
-            android:scaleType="centerInside"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-    />
-
-
-    <EditText
-            android:id="@+id/product_name"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ScrollView01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/product_image"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="20dp"
-            android:padding="20dp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-
-    />
+            android:layout_height="match_parent"
+            tools:context=".EditActivity">
 
 
-    <EditText
-            android:id="@+id/product_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/product_name"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="6dp"
-            android:padding="20dp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-
-    />
+        <ImageView
+                android:id="@+id/product_image"
+                android:paddingTop="30dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:cropToPadding="false"
+                android:scaleType="centerInside"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+        />
 
 
-    <EditText
-            android:id="@+id/product_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/product_description"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="6dp"
-            android:padding="20dp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+        <EditText
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_image"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="20dp"
+                android:padding="20dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
 
-    />
-
-
-    <Button
-            android:id="@+id/save_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/product_price"
-            android:text="Save"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:padding="17dp"
-            android:layout_marginTop="20dp"
-            android:textSize="18sp"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:background="@drawable/buttons"
-    />
-
-    <Button
-            android:id="@+id/delete_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/save_btn"
-            android:text="Delete"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:padding="17dp"
-            android:layout_marginTop="20dp"
-            android:textSize="18sp"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:background="@drawable/buttons"
-    />
+        />
 
 
-</RelativeLayout>
+        <EditText
+                android:id="@+id/product_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_name"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="6dp"
+                android:padding="20dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+
+        />
+
+
+        <EditText
+                android:id="@+id/product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_description"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="6dp"
+                android:padding="20dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+
+        />
+
+
+        <Button
+                android:id="@+id/save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_price"
+                android:text="Save"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:padding="17dp"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/buttons"
+        />
+
+        <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/save_btn"
+                android:text="Delete"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:padding="17dp"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/buttons"
+        />
+
+
+    </RelativeLayout>
+</ScrollView>

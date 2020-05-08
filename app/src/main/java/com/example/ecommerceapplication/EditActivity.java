@@ -29,9 +29,9 @@ public class EditActivity extends AppCompatActivity {
     private EditText txtProductName, txtProductDescription, txtProductPrice;
     private ImageView imageView;
     private Button saveButton, deleteButton;
-    private Uri ImageUri;
-    private String CategoryName, Description, Price, Pname, saveCurrentDate, saveCurrentTime;
-    private String productRandomKey, downloadImageUrl;
+    private Uri ImageUri = Uri.EMPTY;
+    private String Description, Price, Pname, saveCurrentDate, saveCurrentTime, productRandomKey;
+    private String downloadImageUrl = "";
     private StorageReference ProductImagesRef;
 
     private static final int GalleryPick = 1;
@@ -79,8 +79,7 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
-    private void OpenGallery()
-    {
+    private void OpenGallery() {
         Intent galleryIntent = new Intent();
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
@@ -89,12 +88,10 @@ public class EditActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode==GalleryPick  &&  resultCode==RESULT_OK  &&  data!=null)
-        {
+        if (requestCode == GalleryPick && resultCode == RESULT_OK && data != null) {
             ImageUri = data.getData();
             imageView.setImageURI(ImageUri);
         }
@@ -106,13 +103,10 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Products productsData = dataSnapshot.getValue(Products.class);
-                d("yyy", productsData.getPrice());
                 txtProductName.setText(productsData.getPname());
                 txtProductDescription.setText(productsData.getDescription());
                 txtProductPrice.setText(productsData.getPrice());
                 Picasso.get().load(productsData.getImage()).into(imageView);
-
-                CategoryName = productsData.getCategory();
 
             }
 
@@ -130,7 +124,7 @@ public class EditActivity extends AppCompatActivity {
                 ProductsRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Toast.makeText(EditActivity.this, "Product Deleted ", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditActivity.this, HomeActivity.class);
                             startActivity(intent);
@@ -150,39 +144,24 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-    private void ValidateProductData()
-    {
+    private void ValidateProductData() {
         Description = txtProductDescription.getText().toString();
         Price = txtProductPrice.getText().toString();
         Pname = txtProductName.getText().toString();
 
-
-        if (ImageUri == null)
-        {
-            Toast.makeText(this, "Product image is mandatory...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(Description))
-        {
+        if (TextUtils.isEmpty(Description)) {
             Toast.makeText(this, "Please write product description...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(Price))
-        {
+        } else if (TextUtils.isEmpty(Price)) {
             Toast.makeText(this, "Please write product Price...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(Pname))
-        {
+        } else if (TextUtils.isEmpty(Pname)) {
             Toast.makeText(this, "Please write product name...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             StoreProductInformation();
         }
     }
 
 
-
-    private void StoreProductInformation()
-    {
+    private void StoreProductInformation() {
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
@@ -191,9 +170,20 @@ public class EditActivity extends AppCompatActivity {
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
         saveCurrentTime = currentTime.format(calendar.getTime());
 
+
+
         productRandomKey = saveCurrentDate + saveCurrentTime;
 
+        if (!Uri.EMPTY.equals(ImageUri)) {
+            doUploadTask();
+        } else {
+            SaveProductInfoToDatabase();
+        }
 
+
+    }
+
+    private void doUploadTask() {
         final StorageReference filePath = ProductImagesRef.child(ImageUri.getLastPathSegment() + productRandomKey + ".jpg");
 
         final UploadTask uploadTask = filePath.putFile(ImageUri);
@@ -201,23 +191,19 @@ public class EditActivity extends AppCompatActivity {
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e)
-            {
+            public void onFailure(@NonNull Exception e) {
                 String message = e.toString();
                 Toast.makeText(EditActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-            {
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(EditActivity.this, "Product Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
 
                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
-                    {
-                        if (!task.isSuccessful())
-                        {
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
                             throw task.getException();
                         }
 
@@ -226,13 +212,11 @@ public class EditActivity extends AppCompatActivity {
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
-                    public void onComplete(@NonNull Task<Uri> task)
-                    {
-                        if (task.isSuccessful())
-                        {
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
                             downloadImageUrl = task.getResult().toString();
 
-                            Toast.makeText(EditActivity.this, "got the Product image Url Successfully...", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(EditActivity.this, "got the Product image Url Successfully...", Toast.LENGTH_SHORT).show();
 
                             SaveProductInfoToDatabase();
                         }
@@ -243,32 +227,24 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-
-    private void SaveProductInfoToDatabase()
-    {
+    private void SaveProductInfoToDatabase() {
         HashMap<String, Object> productMap = new HashMap<>();
-        productMap.put("pid", productRandomKey);
-        productMap.put("date", saveCurrentDate);
-        productMap.put("time", saveCurrentTime);
         productMap.put("description", Description);
-        productMap.put("image", downloadImageUrl);
-        productMap.put("category", CategoryName);
+        if (!downloadImageUrl.isEmpty()) {
+            productMap.put("image", downloadImageUrl);
+        }
         productMap.put("price", Price);
         productMap.put("pname", Pname);
         ProductsRef.updateChildren(productMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task)
-                    {
-                        if (task.isSuccessful())
-                        {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
                             Intent intent = new Intent(EditActivity.this, HomeActivity.class);
                             startActivity(intent);
 
-                            Toast.makeText(EditActivity.this, "Product is added successfully..", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                            Toast.makeText(EditActivity.this, "Product Updated...", Toast.LENGTH_SHORT).show();
+                        } else {
                             String message = task.getException().toString();
                             Toast.makeText(EditActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                         }

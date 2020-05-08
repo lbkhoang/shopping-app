@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import static android.util.Log.d;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,8 +64,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
 
         FirebaseRecyclerOptions<Products> options =
@@ -75,18 +76,26 @@ public class HomeActivity extends AppCompatActivity
         FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model)
-                    {
+                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model) {
                         holder.txtProductName.setText(model.getPname());
                         holder.txtProductDescription.setText(model.getDescription());
                         holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                         Picasso.get().load(model.getImage()).into(holder.imageView);
+                        holder.imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                d("xxx","snb"+ model.getPid());
+                                Intent intent = new Intent(HomeActivity.this, EditActivity.class);
+                                intent.putExtra("pId", model.getPid());
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
                     }
 
                     @NonNull
                     @Override
-                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-                    {
+                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
                         ProductViewHolder holder = new ProductViewHolder(view);
                         return holder;
@@ -122,31 +131,23 @@ public class HomeActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
+    public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_cart)
-        {
+        if (id == R.id.nav_cart) {
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_orders)
-        {
+            finish();
+        } else if (id == R.id.nav_orders) {
 
-        }
-        else if (id == R.id.nav_categories)
-        {
+        } else if (id == R.id.nav_categories) {
             Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_settings)
-        {
+            finish();
+        } else if (id == R.id.nav_settings) {
             //TODO to setting
-        }
-        else if (id == R.id.nav_logout)
-        {
+        } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

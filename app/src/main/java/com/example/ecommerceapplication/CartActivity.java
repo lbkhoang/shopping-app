@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.google.firebase.database.*;
 
+import static android.util.Log.d;
+
 public class CartActivity extends AppCompatActivity {
 
     private TextView textView;

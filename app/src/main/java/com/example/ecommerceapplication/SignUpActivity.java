@@ -104,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, String.valueOf(databaseError));
+                Toast.makeText(SignUpActivity.this, "Error Loading Data", Toast.LENGTH_SHORT).show();
             }
         });
     }

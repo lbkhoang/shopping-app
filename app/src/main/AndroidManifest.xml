@@ -9,6 +9,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".EditCartActivity">
+        </activity>
+        <activity android:name=".AddToCartActivity">
+        </activity>
         <activity android:name=".EditActivity">
         </activity>
         <activity android:name=".CartActivity">

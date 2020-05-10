@@ -25,10 +25,10 @@ public class ProductViewHolder extends RecyclerView.ViewHolder implements View.O
         txtProductPrice = (TextView) itemView.findViewById(R.id.product_price);
     }
 
-    public void setItemClick(ItemClick listener)
-    {
-        this.listener = listener;
-    }
+//    public void setItemClick(ItemClick listener)
+//    {
+//        this.listener = listener;
+//    }
 
     @Override
     public void onClick(View view)

@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private Users user;
     private FloatingActionButton floatingActionButton;
-    RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,16 +1,23 @@
 package com.example.ecommerceapplication;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
+
 import com.example.ecommerceapplication.Model.Config;
-import com.paypal.android.sdk.payments.*;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+
 import org.json.JSONException;
 
 import java.math.BigDecimal;
@@ -36,15 +43,15 @@ public class CheckOutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_check_out);
 
         //start paypal service
         Intent intent = new Intent(this,PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
         startService(intent);
 
-        btnPayNow = findViewById(R.id.btn_Pay_Now);
-        edtAmount = findViewById(R.id.edt_Amount);
+        btnPayNow = findViewById(R.id.btnPayNow);
+        edtAmount = findViewById(R.id.edtAmount);
 
         btnPayNow.setOnClickListener(new View.OnClickListener() {
             @Override

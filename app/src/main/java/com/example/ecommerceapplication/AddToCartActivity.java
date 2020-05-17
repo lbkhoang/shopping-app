@@ -80,7 +80,7 @@ public class AddToCartActivity extends AppCompatActivity {
         });
 
         loadProductData();
-        txtQuantity.setText(amount == null ? "" : amount);
+        txtQuantity.setText(amount == null ? "0" : amount);
     }
 
 

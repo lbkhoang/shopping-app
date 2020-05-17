@@ -38,8 +38,7 @@ public class EditCartActivity extends AppCompatActivity {
         Paper.init(this);
         user = Paper.book().read("userDetail");
 
-        //OrderRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(user.getPhone());
-        OrderRef = FirebaseDatabase.getInstance().getReference().child("Orders");
+        OrderRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(user.getPhone());
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -51,42 +50,39 @@ public class EditCartActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Orders> options =
-                new FirebaseRecyclerOptions.Builder<Orders>()
-                        .setQuery(OrderRef, Orders.class)
+        FirebaseRecyclerOptions<Products> options =
+                new FirebaseRecyclerOptions.Builder<Products>()
+                        .setQuery(OrderRef, Products.class)
                         .build();
 
 
-        FirebaseRecyclerAdapter<Orders, OrderViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Orders, OrderViewHolder>(options) {
+        FirebaseRecyclerAdapter<Products, OrderViewHolder> adapter =
+                new FirebaseRecyclerAdapter<Products, OrderViewHolder>(options) {
                     @NonNull
                     @Override
                     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items_layout, parent, false);
                         OrderViewHolder holder = new OrderViewHolder(view);
                         return holder;
                     }
 
                     @Override
-                    protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Orders model) {
+                    protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Products model) {
                         holder.txtProductName.setText(model.getPname());
-                        holder.txtProductName.setText(model.getQuantity());
-                        //holder.txtProductDescription.setText(model.getDescription());
                         holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
-//                        Picasso.get().load(model.getImage()).into(holder.imageView);
-//                        holder.imageView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                    Intent intent = new Intent(EditCartActivity.this, AddToCartActivity.class);
-//                                    intent.putExtra("pId", model.getPid());
-//                                    startActivity(intent);
-//                                }
-//
-//                            }
-//                        });
-                    }
-
-                };
+                        holder.txtProductQuantity.setText("Amount = " +model.getQuantity());
+                        Picasso.get().load(model.getImage()).into(holder.imageView);
+                        holder.imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                    Intent intent = new Intent(EditCartActivity.this, AddToCartActivity.class);
+                                    intent.putExtra("pId", model.getPid());
+                                    intent.putExtra("amount", model.getQuantity());
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    };
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }

@@ -13,15 +13,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <EditText
+        <TextView
                 android:id="@+id/edtAmount"
-                android:hint="Enter Amount"
+                android:text="Amount"
+                android:textAlignment="center"
+                android:textColor="#e00000"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         <Button
                 android:id="@+id/btnPayNow"
                 android:text="Pay Now"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <Button
+                android:id="@+id/btnPayLater"
+                android:text="Pay on delivery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>

@@ -78,8 +78,6 @@ public class SignUpActivity extends AppCompatActivity {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Boolean bool = dataSnapshot.child(phone).exists();
-                Log.d("fffffffffffff", String.valueOf(bool));
                 if(!dataSnapshot.child(phone).exists()){
                     Map<String, Object> userData = new HashMap<>();
                     userData.put("phone", phone);

@@ -1,5 +1,6 @@
 package com.example.ecommerceapplication;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,12 +15,18 @@ import com.google.firebase.database.*;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddToCartActivity extends AppCompatActivity {
 
     private DatabaseReference ProductsRef;
     private TextView txtProductName, txtProductDescription, txtProductPrice, txtQuantity;
     private ImageView imageView;
-    private Button addButton, removeButton;
+    private Button increaseButton, decreaseButton, addButton;
+    private Products productsData;
+    private String pId, amount;
+    private Users user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +34,10 @@ public class AddToCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_to_cart);
 
         Paper.init(this);
-        Users user = Paper.book().read("userDetail");
+        user = Paper.book().read("userDetail");
 
-        String pId = getIntent().getStringExtra("pId");
+        pId = getIntent().getStringExtra("pId");
+        amount = getIntent().getStringExtra("amount");
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products").child(pId);
 
@@ -38,10 +46,11 @@ public class AddToCartActivity extends AppCompatActivity {
         txtProductDescription = findViewById(R.id.product_description);
         txtProductPrice = findViewById(R.id.product_price);
         txtQuantity = findViewById(R.id.product_quantity);
-        addButton = findViewById(R.id.add_btn);
-        removeButton = findViewById(R.id.remove_btn);
+        increaseButton = findViewById(R.id.add_btn);
+        decreaseButton = findViewById(R.id.remove_btn);
+        addButton = findViewById(R.id.add_to_cart_btn);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int value = Integer.parseInt(txtQuantity.getText().toString());
@@ -50,7 +59,7 @@ public class AddToCartActivity extends AppCompatActivity {
             }
         });
 
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int value = Integer.parseInt(txtQuantity.getText().toString());
@@ -61,9 +70,19 @@ public class AddToCartActivity extends AppCompatActivity {
             }
         });
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToCart();
+                Intent intent = new Intent(AddToCartActivity.this, EditCartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loadProductData();
+        txtQuantity.setText(amount == null ? "" : amount);
     }
+
 
 
     private void loadProductData() {
@@ -71,7 +90,7 @@ public class AddToCartActivity extends AppCompatActivity {
         ProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Products productsData = dataSnapshot.getValue(Products.class);
+                productsData = dataSnapshot.getValue(Products.class);
                 txtProductName.setText(productsData.getPname());
                 txtProductDescription.setText(productsData.getDescription());
                 txtProductPrice.setText(productsData.getPrice());
@@ -82,6 +101,27 @@ public class AddToCartActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(AddToCartActivity.this, "Error Loading Data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addToCart() {
+
+        productsData.setQuantity(txtQuantity.getText().toString());
+        ProductsRef = FirebaseDatabase.getInstance().getReference().child("Orders");
+        ProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (productsData.getQuantity().equals("0")) {
+                    dataSnapshot.child(user.getPhone()).child(productsData.getPid()).getRef().removeValue();
+                } else {
+                    dataSnapshot.child(user.getPhone()).child(productsData.getPid()).getRef().setValue(productsData);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

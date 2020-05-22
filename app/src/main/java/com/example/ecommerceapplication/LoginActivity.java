@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.ecommerceapplication.Model.Users;
 import com.google.firebase.database.*;
+import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Paper.init(this);
 
         LoginButton = (Button) findViewById(R.id.login_btn);
         InputPhoneNumber = (EditText) findViewById(R.id.phone_input);
@@ -66,16 +68,19 @@ public class LoginActivity extends AppCompatActivity {
                     Users usersData = dataSnapshot.child(phone).getValue(Users.class);
 
                     if (usersData.getPhone().equals(phone) && usersData.getPassword().equals(password)) {
-
+                        Paper.book().write("userDetail", usersData);
                         Toast.makeText(LoginActivity.this, "Logged in Successfully...", Toast.LENGTH_SHORT).show();
 
                         if (ADMIN.equals(usersData.getRole())) {
-                            Intent intent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
+                            //TODO admin home
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             Toast.makeText(LoginActivity.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
+                            finish();
                         }
 
                     } else {

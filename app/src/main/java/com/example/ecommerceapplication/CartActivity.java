@@ -1,12 +1,15 @@
 package com.example.ecommerceapplication;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.ecommerceapplication.Model.Users;
 import com.google.firebase.database.*;
+import io.paperdb.Paper;
 
 import static android.util.Log.d;
 
@@ -22,6 +25,9 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        Paper.init(this);
+        Users user = Paper.book().read("userDetail");
 
         textView = findViewById(R.id.test);
         happyButton = findViewById(R.id.happy_btn);
@@ -47,7 +53,11 @@ public class CartActivity extends AppCompatActivity {
         happyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.setValue("Happy");
+                //databaseReference.setValue("Happy");
+
+                Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
+                startActivity(intent);
+
             }
         });
 

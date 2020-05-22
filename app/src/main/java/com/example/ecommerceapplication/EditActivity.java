@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import io.paperdb.Paper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +41,10 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        Paper.init(this);
+        Users user = Paper.book().read("userDetail");
+
         String pId = getIntent().getStringExtra("pId");
 
         imageView = findViewById(R.id.product_image);
@@ -128,7 +133,6 @@ public class EditActivity extends AppCompatActivity {
                             Toast.makeText(EditActivity.this, "Product Deleted ", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditActivity.this, HomeActivity.class);
                             startActivity(intent);
-                            finish();
                         } else {
                             Toast.makeText(EditActivity.this, "Error Loading Data", Toast.LENGTH_SHORT).show();
                         }

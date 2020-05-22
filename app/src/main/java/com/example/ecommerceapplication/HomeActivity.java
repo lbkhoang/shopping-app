@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.Products;
+import com.example.ecommerceapplication.Model.Users;
 import com.example.ecommerceapplication.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -25,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import io.paperdb.Paper;
 
 import static android.util.Log.d;
 
@@ -34,7 +36,9 @@ public class HomeActivity extends AppCompatActivity
     private AppBarConfiguration mAppBarConfiguration;
     private DatabaseReference ProductsRef;
     private RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
+    private Users user;
+    private FloatingActionButton floatingActionButton;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,23 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+
+        Paper.init(this);
+        user = Paper.book().read("userDetail");
+        //TODO update role in db
+        if (user.getRole() == null) {
+            user.setRole("");
+        }
+
+        floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, EditCartActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Home");
@@ -84,11 +105,18 @@ public class HomeActivity extends AppCompatActivity
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (user.getRole().equals("Admin")){
+
                                 d("xxx","snb"+ model.getPid());
                                 Intent intent = new Intent(HomeActivity.this, EditActivity.class);
                                 intent.putExtra("pId", model.getPid());
                                 startActivity(intent);
-                                finish();
+                                } else {
+                                    Intent intent = new Intent(HomeActivity.this, AddToCartActivity.class);
+                                    intent.putExtra("pId", model.getPid());
+                                    startActivity(intent);
+                                }
+
                             }
                         });
                     }
@@ -105,15 +133,15 @@ public class HomeActivity extends AppCompatActivity
         adapter.startListening();
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,20 +166,17 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_cart) {
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
-            finish();
         } else if (id == R.id.nav_orders) {
 
         } else if (id == R.id.nav_categories) {
             Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);
             startActivity(intent);
-            finish();
         } else if (id == R.id.nav_settings) {
             //TODO to setting
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

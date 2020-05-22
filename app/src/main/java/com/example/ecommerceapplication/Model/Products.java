@@ -1,13 +1,14 @@
 package com.example.ecommerceapplication.Model;
 
 public class Products {
-    private String pname, description, price, image, category, pid, date, time;
+    private String pname, description, price, image, category, pid, date, time, quantity;
 
     public Products() {
 
     }
 
-    public Products(String pname, String description, String price, String image, String category, String pid, String date, String time) {
+    public Products(String pname, String description, String price, String image,
+                    String category, String pid, String date, String time, String quantity) {
         this.pname = pname;
         this.description = description;
         this.price = price;
@@ -16,6 +17,7 @@ public class Products {
         this.pid = pid;
         this.date = date;
         this.time = time;
+        this.quantity = quantity;
     }
 
 
@@ -81,5 +83,13 @@ public class Products {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

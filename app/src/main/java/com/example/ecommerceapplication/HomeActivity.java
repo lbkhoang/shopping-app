@@ -167,7 +167,9 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_orders) {
-
+            //TODO to orders
+            Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_categories) {
             Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);
             startActivity(intent);

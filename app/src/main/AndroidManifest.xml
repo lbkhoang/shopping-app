@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AdminAddNewProductActivity"/>
+        <activity android:name=".ChatActivity"/>
     </application>
 
 </manifest>

@@ -85,6 +85,7 @@ public class EditCartActivity extends AppCompatActivity {
 
                         int productTotalCost = Integer.parseInt(model.getPrice()) * Integer.parseInt(model.getQuantity());
                         totalPrice = totalPrice + productTotalCost;
+                        txtTotalPrice.setText("Total: " + totalPrice + "$");
 
                         Picasso.get().load(model.getImage()).into(holder.imageView);
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +104,6 @@ public class EditCartActivity extends AppCompatActivity {
     }
 
     private void checkout() {
-        txtTotalPrice.setText("Total: " + totalPrice + "$");
 
     }
 

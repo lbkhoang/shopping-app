@@ -31,8 +31,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference ChatsRef;
     private Users user;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +45,8 @@ public class ChatActivity extends AppCompatActivity {
         
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        //TODO add chat
         
         loadChatData();
 
@@ -69,32 +67,30 @@ public class ChatActivity extends AppCompatActivity {
                         .setQuery(ChatsRef, Chats.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Chats, ChatViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Chats, ChatViewHolder>(options) {
-                    @NonNull
-                    @Override
-                    public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_bubble, parent, false);
-                        ChatViewHolder holder = new ChatViewHolder(view);
-                        return holder;
-                    }
+        FirebaseRecyclerAdapter<Chats, ChatViewHolder> adapter = new FirebaseRecyclerAdapter<Chats, ChatViewHolder>(options) {
+            @NonNull
+            @Override
+            public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_bubble, parent, false);
+                ChatViewHolder holder = new ChatViewHolder(view);
+                return holder;
+            }
 
-                    @Override
-                    protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull final Chats model) {
-                        holder.txtUserName.setText(model.getUserName());
-                        holder.txtUserChat.setText(model.getMessage());
+            @Override
+            protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull final Chats model) {
+                holder.txtUserName.setText(model.getUserName());
+                holder.txtUserChat.setText(model.getMessage());
+            }
+        };
+        //scroll to last
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                    recyclerView.scrollToPosition(positionStart);
+            }
+        });
 
-                        if (recyclerView.getAdapter() != null){
-                            int itemCount = recyclerView.getAdapter().getItemCount();
-                            recyclerView.scrollToPosition(itemCount-1);
-                            InputMethodManager inputManager = (InputMethodManager)
-                                    getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
-                        }
-                    }
-                };
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
@@ -112,11 +108,6 @@ public class ChatActivity extends AppCompatActivity {
         if (recyclerView.getAdapter() != null){
             int itemCount = recyclerView.getAdapter().getItemCount();
             recyclerView.scrollToPosition(itemCount-1);
-            InputMethodManager inputManager = (InputMethodManager)
-                    getSystemService(Context.INPUT_METHOD_SERVICE);
-
-            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }

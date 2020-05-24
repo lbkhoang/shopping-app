@@ -56,7 +56,6 @@ public class EditCartActivity extends AppCompatActivity {
             }
         });
         setData();
-        checkout();
     }
 
 
@@ -104,7 +103,9 @@ public class EditCartActivity extends AppCompatActivity {
     }
 
     private void checkout() {
-
+        Intent intent = new Intent(EditCartActivity.this, CheckOutActivity.class);
+        intent.putExtra("amount", txtTotalPrice.getText());
+        startActivity(intent);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.ecommerceapplication;
 
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +32,7 @@ public class CheckOutActivity extends AppCompatActivity {
             .clientId(Config.PAYPAL_CLIENT_ID);
 
     private Button btnPayNow;
-    private EditText edtAmount;
+    private TextView edtAmount;
     private String amount = "";
 
     @Override
@@ -45,6 +46,8 @@ public class CheckOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        amount = getIntent().getStringExtra("amount");
+
         //start paypal service
         Intent intent = new Intent(this,PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
@@ -52,6 +55,9 @@ public class CheckOutActivity extends AppCompatActivity {
 
         btnPayNow = findViewById(R.id.btnPayNow);
         edtAmount = findViewById(R.id.edtAmount);
+
+
+        edtAmount.setText(amount);
 
         btnPayNow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +69,9 @@ public class CheckOutActivity extends AppCompatActivity {
 
     private void processPayment() {
         amount = edtAmount.getText().toString();
+        amount = amount.replace("Total: ", "");
+        amount = amount.replace("$", "");
+
         PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)),"USD",
                 "Purchase Goods",PayPalPayment.PAYMENT_INTENT_SALE);
         Intent intent = new Intent(this, PaymentActivity.class);

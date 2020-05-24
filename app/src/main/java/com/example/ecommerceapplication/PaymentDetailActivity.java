@@ -7,7 +7,7 @@ import android.os.Bundle;
 public class PaymentDetailActivity extends AppCompatActivity {
 
     TextView txtId,txtAmount,txtStatus;
-
+    String amount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,9 +17,9 @@ public class PaymentDetailActivity extends AppCompatActivity {
         txtAmount = findViewById(R.id.txtAmount);
         txtStatus = findViewById(R.id.txtStatus);
 
-        txtId.setText("response.getString(id)");
-        txtStatus.setText("response.getString(state)");
-        txtAmount.setText("$"+"paymentAmount");
+        amount = getIntent().getStringExtra("amount");
+
+        txtAmount.setText("$"+amount);
 
     }
 

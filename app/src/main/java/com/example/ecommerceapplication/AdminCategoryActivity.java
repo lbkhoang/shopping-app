@@ -58,7 +58,7 @@ public class AdminCategoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Sweathers");
+                intent.putExtra("category", "Sweaters");
                 startActivity(intent);
             }
         });

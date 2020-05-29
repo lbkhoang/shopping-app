@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,8 +73,7 @@ public class EditCartActivity extends AppCompatActivity {
                     @Override
                     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items_layout, parent, false);
-                        OrderViewHolder holder = new OrderViewHolder(view);
-                        return holder;
+                        return new OrderViewHolder(view);
                     }
 
                     @Override
@@ -81,10 +81,9 @@ public class EditCartActivity extends AppCompatActivity {
                         holder.txtProductName.setText(model.getPname());
                         holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                         holder.txtProductQuantity.setText("Amount = " +model.getQuantity());
-
-                        int productTotalCost = Integer.parseInt(model.getPrice()) * Integer.parseInt(model.getQuantity());
-                        totalPrice = totalPrice + productTotalCost;
-                        txtTotalPrice.setText("Total: " + totalPrice + "$");
+//                        int productTotalCost = Integer.parseInt(model.getPrice()) * Integer.parseInt(model.getQuantity());
+//                        totalPrice = totalPrice + productTotalCost;
+//                        txtTotalPrice.setText("Total: " + totalPrice + "$");
 
                         Picasso.get().load(model.getImage()).into(holder.imageView);
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -98,15 +97,43 @@ public class EditCartActivity extends AppCompatActivity {
                             });
                         }
                     };
+
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+
+        OrderRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                totalPrice = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Products product = snapshot.getValue(Products.class);
+                    int productTotalCost = Integer.parseInt(product.getPrice()) * Integer.parseInt(product.getQuantity());
+                    totalPrice = totalPrice + productTotalCost;
+                    txtTotalPrice.setText("Total: " + totalPrice + "$");
+                }
+                if (!dataSnapshot.exists()) {
+                    txtTotalPrice.setText("nothing");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void checkout() {
-        Intent intent = new Intent(EditCartActivity.this, CheckOutActivity.class);
-        intent.putExtra("amount", txtTotalPrice.getText());
-        startActivity(intent);
+        if ("nothing".equals(txtTotalPrice.getText().toString())) {
+            Toast.makeText(this, "Nothing in Cart", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(EditCartActivity.this, CheckOutActivity.class);
+            intent.putExtra("amount", txtTotalPrice.getText());
+            startActivity(intent);
+        }
     }
+
 
 
 }

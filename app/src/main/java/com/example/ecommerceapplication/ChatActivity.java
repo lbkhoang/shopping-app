@@ -72,8 +72,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_bubble, parent, false);
-                ChatViewHolder holder = new ChatViewHolder(view);
-                return holder;
+                return new ChatViewHolder(view);
             }
 
             @Override

@@ -76,6 +76,7 @@ public class AddToCartActivity extends AppCompatActivity {
                 addToCart();
                 Intent intent = new Intent(AddToCartActivity.this, EditCartActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

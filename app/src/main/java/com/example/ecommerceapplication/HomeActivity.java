@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity
     private Users user;
     private FloatingActionButton floatingActionButton;
     private RecyclerView.LayoutManager layoutManager;
+    private Query productQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class HomeActivity extends AppCompatActivity
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
 
+        productQuery = ProductsRef.orderByChild("category")
+                .startAt("Female Dresses")
+                .endAt("Female Dresses");
         Paper.init(this);
         user = Paper.book().read("userDetail");
         //TODO update role in db
@@ -90,7 +95,7 @@ public class HomeActivity extends AppCompatActivity
 
         FirebaseRecyclerOptions<Products> options =
                 new FirebaseRecyclerOptions.Builder<Products>()
-                        .setQuery(ProductsRef, Products.class)
+                        .setQuery(productQuery, Products.class)
                         .build();
 
 

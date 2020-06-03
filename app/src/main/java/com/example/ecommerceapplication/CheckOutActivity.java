@@ -20,6 +20,7 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
@@ -87,10 +88,11 @@ public class CheckOutActivity extends AppCompatActivity {
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirmation != null){
                     try {
-                        String paymentDetails = confirmation.toJSONObject().toString(4);
+                        JSONObject paymentDetails = confirmation.toJSONObject();
                         startActivity(new Intent(this,PaymentDetailActivity.class)
-                                .putExtra("Payment Details",paymentDetails)
-                                .putExtra("Amount",amount));
+                                .putExtra("apiRespond",paymentDetails.getJSONObject("response").get("id").toString())
+                                .putExtra("amount",amount));
+
                     } catch (JSONException e){
                         e.printStackTrace();
                     }

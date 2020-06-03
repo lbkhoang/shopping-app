@@ -81,9 +81,6 @@ public class EditCartActivity extends AppCompatActivity {
                         holder.txtProductName.setText(model.getPname());
                         holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                         holder.txtProductQuantity.setText("Amount = " +model.getQuantity());
-//                        int productTotalCost = Integer.parseInt(model.getPrice()) * Integer.parseInt(model.getQuantity());
-//                        totalPrice = totalPrice + productTotalCost;
-//                        txtTotalPrice.setText("Total: " + totalPrice + "$");
 
                         Picasso.get().load(model.getImage()).into(holder.imageView);
                         holder.imageView.setOnClickListener(new View.OnClickListener() {

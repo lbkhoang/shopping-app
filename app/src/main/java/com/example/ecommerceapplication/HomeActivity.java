@@ -49,9 +49,9 @@ public class HomeActivity extends AppCompatActivity
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
 
-        productQuery = ProductsRef.orderByChild("category")
-                .startAt("Female Dresses")
-                .endAt("Female Dresses");
+        productQuery = ProductsRef.orderByChild("category");
+                //.startAt("Female Dresses")
+                //.endAt("Female Dresses");
         Paper.init(this);
         user = Paper.book().read("userDetail");
         //TODO update role in db
@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_orders) {
             //TODO to orders
-            Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
+            Intent intent = new Intent(HomeActivity.this, OrderListActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_categories) {
             Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);

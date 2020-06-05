@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.widget.Toolbar;
 import com.example.ecommerceapplication.Model.Products;
 import com.example.ecommerceapplication.Model.Users;
 import com.google.firebase.database.*;
@@ -49,6 +50,18 @@ public class AddToCartActivity extends AppCompatActivity {
         increaseButton = findViewById(R.id.add_btn);
         decreaseButton = findViewById(R.id.remove_btn);
         addButton = findViewById(R.id.add_to_cart_btn);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Cart");
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO back button pressed
+                Toast.makeText(AddToCartActivity.this, "Go Back", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +123,7 @@ public class AddToCartActivity extends AppCompatActivity {
 
         productsData.setQuantity(txtQuantity.getText().toString());
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Orders");
-        ProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        ProductsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (productsData.getQuantity().equals("0")) {

@@ -1,6 +1,7 @@
 package com.example.ecommerceapplication;
 
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,16 +14,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ecommerceapplication.Model.Config;
+import com.example.ecommerceapplication.Model.Orders;
+import com.example.ecommerceapplication.Model.Products;
+import com.example.ecommerceapplication.Model.Users;
+import com.google.firebase.database.*;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
+import io.paperdb.Paper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckOutActivity extends AppCompatActivity {
 
@@ -35,6 +43,9 @@ public class CheckOutActivity extends AppCompatActivity {
     private Button btnPayNow;
     private TextView edtAmount;
     private String amount = "";
+    private Map<String,Object> orderData;
+
+    private Users user;
 
     @Override
     protected void onDestroy() {
@@ -46,6 +57,9 @@ public class CheckOutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        Paper.init(this);
+        user = Paper.book().read("userDetail");
 
         amount = getIntent().getStringExtra("amount");
 
@@ -66,12 +80,16 @@ public class CheckOutActivity extends AppCompatActivity {
                 processPayment();
             }
         });
+
+        orderData = new HashMap<>();
+        orderData.put("Note", "No Sugar");
+        orderData.put("Cost", amount);
+
     }
 
     private void processPayment() {
         amount = edtAmount.getText().toString();
-        amount = amount.replace("Total: ", "");
-        amount = amount.replace("$", "");
+        amount = amount.replace("Total: $", "");
 
         PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)),"USD",
                 "Purchase Goods",PayPalPayment.PAYMENT_INTENT_SALE);
@@ -83,16 +101,18 @@ public class CheckOutActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        String apiRespond = "";
         if (requestCode == PAYPAL_REQUEST_CODE){
             if (resultCode == RESULT_OK){
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirmation != null){
                     try {
                         JSONObject paymentDetails = confirmation.toJSONObject();
+                        apiRespond = paymentDetails.getJSONObject("response").get("id").toString();
                         startActivity(new Intent(this,PaymentDetailActivity.class)
-                                .putExtra("apiRespond",paymentDetails.getJSONObject("response").get("id").toString())
+                                .putExtra("apiRespond", apiRespond)
                                 .putExtra("amount",amount));
-
+                        saveOrder(apiRespond);
                     } catch (JSONException e){
                         e.printStackTrace();
                     }
@@ -101,5 +121,29 @@ public class CheckOutActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
         } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID)
             Toast.makeText(this, "Invalid", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveOrder(final String apiRespond) {
+        final DatabaseReference OrderRef = FirebaseDatabase.getInstance().getReference();
+        final Orders orders = new Orders();
+        OrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.child("Orders").child(user.getPhone()).getChildren()) {
+                    Products product = snapshot.getValue(Products.class);
+                    orders.setPname(product.getPname());
+                    orders.setPrice(product.getPrice());
+                    orders.setQuantity(product.getQuantity());
+                    OrderRef.child("ConfirmedOrder").child(apiRespond).child("Product").child(product.getPid())
+                            .getRef().setValue(orders);
+                }
+                    OrderRef.child("ConfirmedOrder").child(apiRespond).updateChildren(orderData);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

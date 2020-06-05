@@ -79,11 +79,11 @@ public class EditCartActivity extends AppCompatActivity {
                     @Override
                     protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Products model) {
                         holder.txtProductName.setText(model.getPname());
-                        holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                         holder.txtProductQuantity.setText("Amount = " +model.getQuantity());
+                        holder.txtProductPrice.setText("$"+model.getPrice());
 
                         Picasso.get().load(model.getImage()).into(holder.imageView);
-                        holder.imageView.setOnClickListener(new View.OnClickListener() {
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                     Intent intent = new Intent(EditCartActivity.this, AddToCartActivity.class);
@@ -98,7 +98,7 @@ public class EditCartActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        OrderRef.addValueEventListener(new ValueEventListener() {
+        OrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 totalPrice = 0;

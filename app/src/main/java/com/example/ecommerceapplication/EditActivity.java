@@ -34,6 +34,7 @@ public class EditActivity extends AppCompatActivity {
     private String Description, Price, Pname, saveCurrentDate, saveCurrentTime, productRandomKey;
     private String downloadImageUrl = "";
     private StorageReference ProductImagesRef;
+    private String pId;
 
     private static final int GalleryPick = 1;
 
@@ -45,7 +46,7 @@ public class EditActivity extends AppCompatActivity {
         Paper.init(this);
         Users user = Paper.book().read("userDetail");
 
-        String pId = getIntent().getStringExtra("pId");
+        pId = getIntent().getStringExtra("pId");
 
         imageView = findViewById(R.id.product_image);
         txtProductName = findViewById(R.id.product_name);
@@ -81,7 +82,6 @@ public class EditActivity extends AppCompatActivity {
                 deleteProductData();
             }
         });
-
     }
 
     private void OpenGallery() {
@@ -232,7 +232,7 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void SaveProductInfoToDatabase() {
-        HashMap<String, Object> productMap = new HashMap<>();
+        final HashMap<String, Object> productMap = new HashMap<>();
         productMap.put("description", Description);
         if (!downloadImageUrl.isEmpty()) {
             productMap.put("image", downloadImageUrl);
@@ -247,6 +247,7 @@ public class EditActivity extends AppCompatActivity {
                             Intent intent = new Intent(EditActivity.this, HomeActivity.class);
                             startActivity(intent);
 
+                            updateProductData(productMap);
                             Toast.makeText(EditActivity.this, "Product Updated...", Toast.LENGTH_SHORT).show();
                         } else {
                             String message = task.getException().toString();
@@ -254,5 +255,29 @@ public class EditActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+    }
+
+    private void updateProductData(final HashMap<String, Object> productMap) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Orders");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot childsnapshot: snapshot.getChildren()){
+                        if (childsnapshot.getKey().equals(pId)){
+                        d("order", childsnapshot.getKey()+" "+pId);
+                            childsnapshot.getRef().updateChildren(productMap);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

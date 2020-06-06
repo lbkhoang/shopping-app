@@ -51,18 +51,6 @@ public class AddToCartActivity extends AppCompatActivity {
         decreaseButton = findViewById(R.id.remove_btn);
         addButton = findViewById(R.id.add_to_cart_btn);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Cart");
-        setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO back button pressed
-                Toast.makeText(AddToCartActivity.this, "Go Back", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

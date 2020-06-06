@@ -131,6 +131,7 @@ public class EditActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(EditActivity.this, "Product Deleted ", Toast.LENGTH_SHORT).show();
+                            delProductData();
                             Intent intent = new Intent(EditActivity.this, HomeActivity.class);
                             startActivity(intent);
                         } else {
@@ -268,6 +269,28 @@ public class EditActivity extends AppCompatActivity {
                         if (childsnapshot.getKey().equals(pId)){
                         d("order", childsnapshot.getKey()+" "+pId);
                             childsnapshot.getRef().updateChildren(productMap);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void delProductData() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Orders");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot childsnapshot: snapshot.getChildren()){
+                        if (childsnapshot.getKey().equals(pId)){
+                            childsnapshot.getRef().removeValue();
                         }
                     }
                 }

@@ -106,7 +106,7 @@ public class EditCartActivity extends AppCompatActivity {
                     Products product = snapshot.getValue(Products.class);
                     int productTotalCost = Integer.parseInt(product.getPrice()) * Integer.parseInt(product.getQuantity());
                     totalPrice = totalPrice + productTotalCost;
-                    txtTotalPrice.setText("Total: " + totalPrice + "$");
+                    txtTotalPrice.setText("Total: $" + totalPrice);
                 }
                 if (!dataSnapshot.exists()) {
                     txtTotalPrice.setText("nothing");

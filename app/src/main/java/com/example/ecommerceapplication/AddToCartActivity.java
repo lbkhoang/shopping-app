@@ -111,7 +111,7 @@ public class AddToCartActivity extends AppCompatActivity {
 
         productsData.setQuantity(txtQuantity.getText().toString());
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Orders");
-        ProductsRef.addValueEventListener(new ValueEventListener() {
+        ProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (productsData.getQuantity().equals("0")) {

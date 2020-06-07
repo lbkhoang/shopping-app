@@ -22,7 +22,6 @@
                 android:textAlignment="center"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
         />
 
         <ImageView
@@ -41,7 +40,6 @@
                 android:text="Product Price"
                 android:textAlignment="center"
                 android:textSize="18dp"
-                android:textColor="@color/colorPrimaryDark"
         />
 
         <TextView
@@ -53,7 +51,6 @@
                 android:text="Product Quantity"
                 android:textAlignment="center"
                 android:textSize="16dp"
-                android:textColor="@color/colorPrimaryDark"
         />
 
 

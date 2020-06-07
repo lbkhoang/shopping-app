@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_home"
+    <item android:id="@+id/search_app_bar"
           android:title="Home"
-          android:icon="@drawable/ic_home_black_24dp"
+          android:icon="@drawable/ic_search_24dp"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+    <item android:id="@+id/home_app_bar"
+          android:title="Home"
+          android:icon="@drawable/ic_home_24dp"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+    <item android:id="@+id/cart_app_bar"
+          android:title="Home"
+          android:icon="@drawable/ic_shopping_cart_24dp"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+    <item android:id="@+id/order_app_bar"
+          android:title="Home"
+          android:icon="@drawable/ic_order_24dp"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 </menu>

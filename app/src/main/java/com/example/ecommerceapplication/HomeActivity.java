@@ -3,6 +3,7 @@ package com.example.ecommerceapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
@@ -31,8 +32,7 @@ import io.paperdb.Paper;
 
 import static android.util.Log.d;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private DatabaseReference ProductsRef;
@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.home_page);
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
 
@@ -69,15 +69,9 @@ public class HomeActivity extends AppCompatActivity
         });
 
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.bottom_app_bar);
 //        toolbar.setTitle("Home");
-//        setSupportActionBar(toolbar);
-
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
+        setSupportActionBar(toolbar);
 
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
@@ -101,7 +95,7 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model) {
                         holder.txtProductName.setText(model.getPname());
-                        holder.txtProductDescription.setText(model.getDescription());
+                        //holder.txtProductDescription.setText(model.getDescription());
                         holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                         Picasso.get().load(model.getImage()).into(holder.imageView);
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -137,48 +131,33 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//
-//        }
-        return true;
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_cart) {
-            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_orders) {
-            //TODO to orders
-            Intent intent = new Intent(HomeActivity.this, OrderListActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_categories) {
-            Intent intent = new Intent(HomeActivity.this, AdminCategoryActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_logout) {
-            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+        switch (item.getItemId()){
+            case R.id.home_app_bar:
+                showMsg("home");
+                return true;
+            case R.id.cart_app_bar:
+                showMsg("cart");
+                return true;
+            case R.id.order_app_bar:
+                showMsg("order");
+                return true;
+            case R.id.search_app_bar:
+                showMsg("search");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
+    private void showMsg(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 
 }

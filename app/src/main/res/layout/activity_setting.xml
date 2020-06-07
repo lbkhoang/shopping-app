@@ -81,7 +81,6 @@
             android:textSize="18sp"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:background="@drawable/buttons"
     />
 
 

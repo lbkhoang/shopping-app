@@ -98,7 +98,7 @@ public class EditCartActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        OrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        OrderRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 totalPrice = 0;

@@ -1,24 +1,18 @@
 package com.example.ecommerceapplication;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.Chats;
-import com.example.ecommerceapplication.Model.Products;
 import com.example.ecommerceapplication.Model.Users;
 import com.example.ecommerceapplication.ViewHolder.ChatViewHolder;
-import com.example.ecommerceapplication.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -48,16 +42,16 @@ public class ChatActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         
-        loadChatData();
 
-        Button sendBtn = findViewById(R.id.send_btn);
+        ImageButton sendBtn = findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();
             }
         });
-        
+
+        loadChatData();
     }
 
 
@@ -81,6 +75,10 @@ public class ChatActivity extends AppCompatActivity {
                 holder.txtUserChat.setText(model.getMessage());
             }
         };
+
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+
         //scroll to last
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -89,9 +87,6 @@ public class ChatActivity extends AppCompatActivity {
                     recyclerView.scrollToPosition(positionStart);
             }
         });
-
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
     }
 
     private void sendMessage() {

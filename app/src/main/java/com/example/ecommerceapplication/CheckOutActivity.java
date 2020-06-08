@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,8 +84,8 @@ public class CheckOutActivity extends AppCompatActivity {
         });
 
         orderData = new HashMap<>();
-        orderData.put("Note", "No Sugar");
-        orderData.put("Cost", amount);
+        orderData.put("note", "No Sugar");
+        orderData.put("cost", amount);
 
     }
 
@@ -137,6 +139,10 @@ public class CheckOutActivity extends AppCompatActivity {
                     OrderRef.child("ConfirmedOrder").child(apiRespond).child("Product").child(product.getPid())
                             .getRef().setValue(orders);
                 }
+
+                    orderData.put("userId", user.getPhone());
+                    orderData.put("orderId", apiRespond);
+                    orderData.put("date", getDate());
                     OrderRef.child("ConfirmedOrder").child(apiRespond).updateChildren(orderData);
             }
 
@@ -145,5 +151,17 @@ public class CheckOutActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String getDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        String saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        String saveCurrentTime = currentTime.format(calendar.getTime());
+
+        return saveCurrentDate + "" + saveCurrentTime;
     }
 }

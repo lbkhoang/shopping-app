@@ -28,6 +28,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         amount = getIntent().getStringExtra("amount");
 
         txtAmount.setText("$"+amount);
+        txtStatus.setText("Thanks for purchase, your order id is:");
         txtId.setText(apiRespond);
 
     }

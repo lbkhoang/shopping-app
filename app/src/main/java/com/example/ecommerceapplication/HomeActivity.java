@@ -207,7 +207,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.search_app_bar:
-                showMsg("search");
+                intent = new Intent(HomeActivity.this, Search.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

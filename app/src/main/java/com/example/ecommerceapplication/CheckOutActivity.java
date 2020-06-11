@@ -143,6 +143,7 @@ public class CheckOutActivity extends AppCompatActivity {
                     orderData.put("userId", user.getPhone());
                     orderData.put("orderId", apiRespond);
                     orderData.put("date", getDate());
+                    orderData.put("time", getTime());
                     OrderRef.child("ConfirmedOrder").child(apiRespond).updateChildren(orderData);
             }
 
@@ -153,15 +154,19 @@ public class CheckOutActivity extends AppCompatActivity {
         });
     }
 
+    private String getTime() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+
+        return currentTime.format(calendar.getTime());
+    }
+
     private String getDate() {
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-        String saveCurrentDate = currentDate.format(calendar.getTime());
 
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        String saveCurrentTime = currentTime.format(calendar.getTime());
-
-        return saveCurrentDate + "" + saveCurrentTime;
+        return currentDate.format(calendar.getTime());
     }
 }

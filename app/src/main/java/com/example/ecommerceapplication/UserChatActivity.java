@@ -88,6 +88,7 @@ public class UserChatActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(UserChatActivity.this, ChatActivity.class);
+                        intent.putExtra("userId", model.getPhone());
                         startActivity(intent);
                     }
                 });

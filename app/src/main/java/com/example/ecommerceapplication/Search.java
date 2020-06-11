@@ -93,16 +93,14 @@ public class Search extends AppCompatActivity {
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Intent intent;
                                 if (user.getRole().equals("Admin")){
-
-                                    Intent intent = new Intent(Search.this, EditActivity.class);
-                                    intent.putExtra("pId", model.getPid());
-                                    startActivity(intent);
+                                    intent = new Intent(Search.this, EditActivity.class);
                                 } else {
-                                    Intent intent = new Intent(Search.this, AddToCartActivity.class);
-                                    intent.putExtra("pId", model.getPid());
-                                    startActivity(intent);
+                                    intent = new Intent(Search.this, AddToCartActivity.class);
                                 }
+                                intent.putExtra("pId", model.getPid());
+                                startActivity(intent);
 
                             }
                         });

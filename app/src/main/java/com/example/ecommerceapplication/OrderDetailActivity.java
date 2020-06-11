@@ -1,6 +1,5 @@
 package com.example.ecommerceapplication;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.ecommerceapplication.Model.OrderList;
+import com.example.ecommerceapplication.Model.Products;
 import com.example.ecommerceapplication.ViewHolder.OrderListViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class OrderListActivity extends AppCompatActivity {
+public class OrderDetailActivity extends AppCompatActivity {
 
     private DatabaseReference OrderRef;
     private RecyclerView recyclerView;
@@ -24,27 +23,33 @@ public class OrderListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_list);
+        setContentView(R.layout.activity_order_detail);
 
-        OrderRef = FirebaseDatabase.getInstance().getReference().child("ConfirmedOrder");
+        String orderId = getIntent().getStringExtra("orderId");
+
+        OrderRef = FirebaseDatabase.getInstance().getReference().child("ConfirmedOrder").child(orderId).child("Product");
 
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        loadOrderProductData();
+
         loadOrderData();
-
-
     }
 
     private void loadOrderData() {
-        FirebaseRecyclerOptions<OrderList> options =
-                new FirebaseRecyclerOptions.Builder<OrderList>()
-                        .setQuery(OrderRef, OrderList.class)
+        //TODO
+    }
+
+    private void loadOrderProductData() {
+        FirebaseRecyclerOptions<Products> options =
+                new FirebaseRecyclerOptions.Builder<Products>()
+                        .setQuery(OrderRef, Products.class)
                         .build();
 
-        FirebaseRecyclerAdapter<OrderList, OrderListViewHolder> adapter = new FirebaseRecyclerAdapter<OrderList, OrderListViewHolder>(options) {
+        FirebaseRecyclerAdapter<Products, OrderListViewHolder> adapter = new FirebaseRecyclerAdapter<Products, OrderListViewHolder>(options) {
             @NonNull
             @Override
             public OrderListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,22 +58,15 @@ public class OrderListActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull OrderListViewHolder holder, int position, @NonNull final OrderList model) {
-                holder.txtOrderName.setText(model.getNote());
-                holder.txtOrderCost.setText(model.getOrderId());
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
-                        intent.putExtra("orderId", model.getOrderId());
-                        startActivity(intent);
-                    }
-                });
+            protected void onBindViewHolder(@NonNull OrderListViewHolder holder, int position, @NonNull final Products model) {
+                holder.txtOrderName.setText(model.getPname());
+                holder.txtOrderCost.setText(model.getQuantity());
             }
         };
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
+
+
 }

@@ -33,9 +33,13 @@ public class ChatActivity extends AppCompatActivity {
         
         Paper.init(this);
         user = Paper.book().read("userDetail");
-        
-        //TODO get chat id by combine 2 user id
-        ChatsRef = FirebaseDatabase.getInstance().getReference().child("Chats").child("test");
+        String idCombine, currentUserId, userId;
+        userId = getIntent().getStringExtra("userId");
+        currentUserId = user.getPhone();
+
+        idCombine = combineId(userId, currentUserId);
+
+        ChatsRef = FirebaseDatabase.getInstance().getReference().child("Chats").child(idCombine);
         
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
@@ -52,6 +56,14 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         loadChatData();
+    }
+
+    private String combineId(String str1, String str2) {
+        if (str1.compareTo(str2) <= 0) {
+            return str1 + "-" + str2;
+        } else {
+            return str2 + "-" + str1;
+        }
     }
 
 

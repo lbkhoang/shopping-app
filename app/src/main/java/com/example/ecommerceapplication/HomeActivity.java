@@ -200,7 +200,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.cart_app_bar:
-                showMsg("cart");
+                intent = new Intent(HomeActivity.this, WishList.class);
+                startActivity(intent);
                 return true;
             case R.id.order_app_bar:
                 intent = new Intent(HomeActivity.this, OrderListActivity.class);

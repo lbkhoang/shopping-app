@@ -21,10 +21,10 @@ import java.util.Map;
 
 public class AddToCartActivity extends AppCompatActivity {
 
-    private DatabaseReference ProductsRef;
+    private DatabaseReference ProductsRef, FavRef;
     private TextView txtProductName, txtProductDescription, txtProductPrice, txtQuantity;
     private ImageView imageView;
-    private Button increaseButton, decreaseButton, addButton;
+    private Button increaseButton, decreaseButton, addButton, favbutton;
     private Products productsData;
     private String pId, amount;
     private Users user;
@@ -41,6 +41,7 @@ public class AddToCartActivity extends AppCompatActivity {
         amount = getIntent().getStringExtra("amount");
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products").child(pId);
+        FavRef = FirebaseDatabase.getInstance().getReference().child("user").child(user.getPhone()).child("favorite");
 
         imageView = findViewById(R.id.product_image);
         txtProductName = findViewById(R.id.product_name);
@@ -50,6 +51,7 @@ public class AddToCartActivity extends AppCompatActivity {
         increaseButton = findViewById(R.id.add_btn);
         decreaseButton = findViewById(R.id.remove_btn);
         addButton = findViewById(R.id.add_to_cart_btn);
+        favbutton = findViewById(R.id.add_to_fav_btn);
 
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +83,37 @@ public class AddToCartActivity extends AppCompatActivity {
             }
         });
 
+        favbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFav();
+            }
+        });
+
         loadProductData();
         txtQuantity.setText(amount == null ? "0" : amount);
     }
 
+    private void addToFav() {
+
+        FavRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(productsData.getPid()).exists()) {
+                    dataSnapshot.child(productsData.getPid()).getRef().removeValue();
+                    Toast.makeText(AddToCartActivity.this, "removed", Toast.LENGTH_SHORT).show();
+                } else {
+                    dataSnapshot.child(productsData.getPid()).getRef().setValue(productsData);
+                    Toast.makeText(AddToCartActivity.this, "added", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     private void loadProductData() {

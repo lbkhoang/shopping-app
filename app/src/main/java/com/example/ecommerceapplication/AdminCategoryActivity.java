@@ -8,61 +8,101 @@ import android.os.Bundle;
 
 public class AdminCategoryActivity extends AppCompatActivity
 {
-    private ImageView tShirts, sportsTShirts, femaleDresses, sweathers;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_category);
 
+        //drinks
+        ImageView coffee = (ImageView) findViewById(R.id.coffee);
+        ImageView iceBlend = (ImageView) findViewById(R.id.ice_blend);
+        ImageView softDrink = (ImageView) findViewById(R.id.soft_drink);
+        ImageView water = (ImageView) findViewById(R.id.water);
 
-        tShirts = (ImageView) findViewById(R.id.t_shirts);
-        sportsTShirts = (ImageView) findViewById(R.id.sports_t_shirts);
-        femaleDresses = (ImageView) findViewById(R.id.female_dresses);
-        sweathers = (ImageView) findViewById(R.id.sweathers);
+        //deserts
+        ImageView cake = (ImageView) findViewById(R.id.cake);
+        ImageView cupcake = (ImageView) findViewById(R.id.cupcake);
+        ImageView cookie = (ImageView) findViewById(R.id.cookie);
+        ImageView bread = (ImageView) findViewById(R.id.bread);
 
-
-        tShirts.setOnClickListener(new View.OnClickListener() {
+        coffee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
-                intent.putExtra("category", "tShirts");
+                intent.putExtra("category", "coffee");
                 startActivity(intent);
             }
         });
 
 
-        sportsTShirts.setOnClickListener(new View.OnClickListener() {
+        iceBlend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Sports tShirts");
+                intent.putExtra("category", "iceBlend");
                 startActivity(intent);
             }
         });
 
 
-        femaleDresses.setOnClickListener(new View.OnClickListener() {
+        softDrink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Female Dresses");
+                intent.putExtra("category", "softDrink");
                 startActivity(intent);
             }
         });
 
 
-        sweathers.setOnClickListener(new View.OnClickListener() {
+        water.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Sweaters");
+                intent.putExtra("category", "water");
                 startActivity(intent);
             }
         });
 
 
+        cake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
+                intent.putExtra("category", "cake");
+                startActivity(intent);
+            }
+        });
+
+
+        cupcake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
+                intent.putExtra("category", "cupcake");
+                startActivity(intent);
+            }
+        });
+
+
+        cookie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
+                intent.putExtra("category", "cookie");
+                startActivity(intent);
+            }
+        });
+
+
+        bread.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
+                intent.putExtra("category", "bread");
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -6,25 +6,19 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import com.example.ecommerceapplication.Model.Products;
 import com.example.ecommerceapplication.Model.Users;
 import com.google.firebase.database.*;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AddToCartActivity extends AppCompatActivity {
 
     private DatabaseReference ProductsRef, FavRef;
     private TextView txtProductName, txtProductDescription, txtProductPrice, txtQuantity, txtTotal;
     private ImageView imageView;
-    private ImageButton increaseButton, decreaseButton, favbutton;
-    private Button addButton;
+    private ImageButton favbutton;
     private Products productsData;
-    private String pId, amount;
     private Users user;
 
     @Override
@@ -35,8 +29,8 @@ public class AddToCartActivity extends AppCompatActivity {
         Paper.init(this);
         user = Paper.book().read("userDetail");
 
-        pId = getIntent().getStringExtra("pId");
-        amount = getIntent().getStringExtra("amount");
+        String pId = getIntent().getStringExtra("pId");
+        String amount = getIntent().getStringExtra("amount");
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products").child(pId);
         FavRef = FirebaseDatabase.getInstance().getReference().child("user").child(user.getPhone()).child("favorite");
@@ -47,9 +41,9 @@ public class AddToCartActivity extends AppCompatActivity {
         txtProductPrice = findViewById(R.id.product_price);
         txtQuantity = findViewById(R.id.product_quantity);
         txtTotal = findViewById(R.id.txtTotal);
-        increaseButton = findViewById(R.id.add_btn);
-        decreaseButton = findViewById(R.id.remove_btn);
-        addButton = findViewById(R.id.add_to_cart_btn);
+        ImageButton increaseButton = findViewById(R.id.add_btn);
+        ImageButton decreaseButton = findViewById(R.id.remove_btn);
+        Button addButton = findViewById(R.id.add_to_cart_btn);
         favbutton = findViewById(R.id.fav_btn);
 
 
@@ -98,6 +92,8 @@ public class AddToCartActivity extends AppCompatActivity {
 
         loadProductData();
 
+        loadFavData();
+
         txtQuantity.setText(amount == null ? "0" : amount);
     }
 
@@ -108,10 +104,12 @@ public class AddToCartActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(productsData.getPid()).exists()) {
                     dataSnapshot.child(productsData.getPid()).getRef().removeValue();
+                    favbutton.setImageResource(R.drawable.ic_favorite_border_24dp);
                     Toast.makeText(AddToCartActivity.this, "removed", Toast.LENGTH_SHORT).show();
                 } else {
                     dataSnapshot.child(productsData.getPid()).getRef().setValue(productsData);
                     Toast.makeText(AddToCartActivity.this, "added", Toast.LENGTH_SHORT).show();
+                    favbutton.setImageResource(R.drawable.ic_favorite_24dp);
                 }
             }
 
@@ -122,6 +120,24 @@ public class AddToCartActivity extends AppCompatActivity {
         });
     }
 
+
+    private void loadFavData(){
+        FavRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(productsData.getPid()).exists()) {
+                    favbutton.setImageResource(R.drawable.ic_favorite_24dp);
+                } else {
+                    favbutton.setImageResource(R.drawable.ic_favorite_border_24dp);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     private void loadProductData() {
 

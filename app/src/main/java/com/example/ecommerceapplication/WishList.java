@@ -22,6 +22,9 @@ import com.google.firebase.database.*;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WishList extends AppCompatActivity {
 
     private DatabaseReference ProductsRef;
@@ -83,6 +86,7 @@ public class WishList extends AppCompatActivity {
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                checkProduct(model);
                                 if (user.getRole().equals("Admin")){
 
                                     Intent intent = new Intent(WishList.this, EditActivity.class);
@@ -131,4 +135,28 @@ public class WishList extends AppCompatActivity {
         });
     }
 
+    private void checkProduct(Products productFav){
+        final String productFavId = productFav.getPid();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Products").child(productFavId);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Products product = dataSnapshot.getValue(Products.class);
+                    Map<String, Object> data = new HashMap<>();
+                    data.put(productFavId, product);
+                    ProductsRef.child(productFavId).updateChildren(data);
+                } else {
+                    ProductsRef.child(productFavId).removeValue();
+                    //TODO intent here
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

@@ -83,8 +83,8 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull final Chats model) {
-                holder.txtUserName.setText(model.getUserName());
                 holder.txtUserChat.setText(model.getMessage());
+                holder.txtUserName.setText(model.getUserName());
             }
         };
 

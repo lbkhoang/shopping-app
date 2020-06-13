@@ -15,11 +15,6 @@
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_menu_deals"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,12 +37,37 @@
                 app:fabCradleMargin="16dp"
                 app:menu="@menu/home"
                 app:fabCradleRoundedCornerRadius="30dp"/>
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_home_black_24dp"
-                app:layout_anchor="@id/bottom_app_bar"/>
-
+                android:src="@drawable/ic_shopping_cart_24dp"
+                app:layout_anchor="@id/bottom_app_bar"
+        />
+    <ImageView
+            android:id="@+id/circle"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:layout_anchor="@id/fab"
+            app:layout_anchorGravity="end"
+            />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/notification_badge"
+            app:layout_anchorGravity="center"
+            android:elevation="18dp"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+            android:text="10"/>
+    <ImageView
+            android:id="@+id/notification_badge"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_anchor="@id/circle"
+            app:layout_anchorGravity="start|bottom"
+            android:visibility="visible"
+            android:src="@drawable/circle"
+            android:elevation="17dp"
+            android:textStyle="bold"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,10 +2,7 @@ package com.example.ecommerceapplication;
 
 import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,9 +19,10 @@ import java.util.Map;
 public class AddToCartActivity extends AppCompatActivity {
 
     private DatabaseReference ProductsRef, FavRef;
-    private TextView txtProductName, txtProductDescription, txtProductPrice, txtQuantity;
+    private TextView txtProductName, txtProductDescription, txtProductPrice, txtQuantity, txtTotal;
     private ImageView imageView;
-    private Button increaseButton, decreaseButton, addButton, favbutton;
+    private ImageButton increaseButton, decreaseButton, favbutton;
+    private Button addButton;
     private Products productsData;
     private String pId, amount;
     private Users user;
@@ -48,28 +46,34 @@ public class AddToCartActivity extends AppCompatActivity {
         txtProductDescription = findViewById(R.id.product_description);
         txtProductPrice = findViewById(R.id.product_price);
         txtQuantity = findViewById(R.id.product_quantity);
+        txtTotal = findViewById(R.id.txtTotal);
         increaseButton = findViewById(R.id.add_btn);
         decreaseButton = findViewById(R.id.remove_btn);
         addButton = findViewById(R.id.add_to_cart_btn);
-        favbutton = findViewById(R.id.add_to_fav_btn);
+        favbutton = findViewById(R.id.fav_btn);
+
 
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int prdPrice = Integer.parseInt(txtProductPrice.getText().toString());
                 int value = Integer.parseInt(txtQuantity.getText().toString());
                 value = value + 1;
                 txtQuantity.setText(Integer.toString(value));
+                txtTotal.setText("Total: $" + (value * prdPrice));
             }
         });
 
         decreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int prdPrice = Integer.parseInt(txtProductPrice.getText().toString());
                 int value = Integer.parseInt(txtQuantity.getText().toString());
                 if (value != 0) {
                     value = value - 1;
                 }
                 txtQuantity.setText(Integer.toString(value));
+                txtTotal.setText("Total: $" + (value * prdPrice));
             }
         });
 
@@ -90,7 +94,10 @@ public class AddToCartActivity extends AppCompatActivity {
             }
         });
 
+        favbutton.setImageResource(R.drawable.ic_favorite_24dp);
+
         loadProductData();
+
         txtQuantity.setText(amount == null ? "0" : amount);
     }
 

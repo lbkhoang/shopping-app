@@ -3,10 +3,8 @@ package com.example.ecommerceapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.Toast;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.Products;
@@ -15,22 +13,11 @@ import com.example.ecommerceapplication.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.*;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
-
-import static android.util.Log.d;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -86,12 +73,45 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
         setProductData();
 
+        setNotificationBadge();
+
+
         //setDealData();
+    }
+
+    private void setNotificationBadge() {
+        DatabaseReference dbRef = ProductsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Orders").child(user.getPhone());
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    ImageView textView = findViewById(R.id.notification_badge);
+                    textView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     private void setDealData() {
@@ -211,13 +231,13 @@ public class HomeActivity extends AppCompatActivity {
                 intent = new Intent(HomeActivity.this, Search.class);
                 startActivity(intent);
                 return true;
+            case R.id.profile_app_bar:
+                intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showMsg(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

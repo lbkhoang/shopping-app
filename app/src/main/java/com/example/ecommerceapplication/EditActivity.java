@@ -1,9 +1,12 @@
 package com.example.ecommerceapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +33,7 @@ public class EditActivity extends AppCompatActivity {
     private EditText txtProductName, txtProductDescription, txtProductPrice;
     private ImageView imageView;
     private Button saveButton, deleteButton;
+    private ImageButton editName, editPrice, editDescription;
     private Uri ImageUri = Uri.EMPTY;
     private String Description, Price, Pname, saveCurrentDate, saveCurrentTime, productRandomKey;
     private String downloadImageUrl = "";
@@ -53,6 +57,9 @@ public class EditActivity extends AppCompatActivity {
         txtProductDescription = findViewById(R.id.product_description);
         txtProductPrice = findViewById(R.id.product_price);
 
+        editName = findViewById(R.id.edit_name_btn);
+        editDescription = findViewById(R.id.edit_description_btn);
+        editPrice = findViewById(R.id.edit_price_btn);
 
         saveButton = findViewById(R.id.save_btn);
         deleteButton = findViewById(R.id.delete_btn);
@@ -103,6 +110,37 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void loadProductData() {
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        txtProductName.setFocusable(false); //to disable it
+
+        editName.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtProductName.setFocusableInTouchMode(true); //to enable it
+                txtProductName.requestFocus();
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        });
+
+        txtProductDescription.setFocusable(false); //to disable it
+
+        editDescription.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtProductDescription.setFocusableInTouchMode(true); //to enable it
+                txtProductDescription.requestFocus();
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        });
+
+        txtProductPrice.setFocusable(false); //to disable it
+
+        editPrice.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtProductPrice.setFocusableInTouchMode(true); //to enable it
+                txtProductPrice.requestFocus();
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        });
 
         ProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

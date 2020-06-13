@@ -31,12 +31,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Product Name"
+                    android:paddingLeft="10dp"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
             <TextView
                     android:id="@+id/product_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
                     android:text="Product Price"
                     android:textSize="18sp"/>
 
@@ -44,7 +46,8 @@
                     android:id="@+id/product_quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Product Quantity"
+                    android:paddingLeft="15dp"
+                    android:text=""
                     android:textSize="16sp"/>
         </LinearLayout>
 
@@ -53,6 +56,9 @@
                 android:layout_width="50dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
+                android:scaleY="0.5"
+                android:scaleX="0.5"
+                android:background="@color/White"
                 android:layout_weight="1"
                 android:src="@drawable/ic_delete_forever_black_24dp"
         />

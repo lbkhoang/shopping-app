@@ -69,7 +69,7 @@ public class UserChatActivity extends AppCompatActivity {
     private void loadUserData() {
         FirebaseRecyclerOptions<Users> options =
                 new FirebaseRecyclerOptions.Builder<Users>()
-                        .setQuery(userQuery, Users.class)
+                        .setQuery(userRef, Users.class)
                         .build();
 
         FirebaseRecyclerAdapter<Users, OrderViewHolder> adapter = new FirebaseRecyclerAdapter<Users, OrderViewHolder>(options) {

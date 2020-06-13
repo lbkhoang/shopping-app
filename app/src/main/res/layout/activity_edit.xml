@@ -4,10 +4,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
     <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".EditActivity">
 
 
@@ -22,55 +21,87 @@
                 android:layout_marginTop="10dp"
         />
 
+        <LinearLayout
+                android:id="@+id/edit_name"
+                android:layout_below="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
         <EditText
                 android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_image"
                 android:inputType="textMultiLine"
-                android:layout_marginTop="20dp"
                 android:padding="20dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-
+                android:layout_marginStart="45dp"
+                android:layout_weight="1"
         />
+        <ImageButton
+                android:id="@+id/edit_name_btn"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit_24dp"
+                android:layout_weight="1"
+                android:background="@color/White"/>
+        </LinearLayout>
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_name"
+                android:id="@+id/edit_description">
 
         <EditText
                 android:id="@+id/product_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_name"
                 android:inputType="textMultiLine"
                 android:layout_marginTop="6dp"
                 android:padding="20dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
+                android:layout_marginStart="45dp"
+                android:layout_weight="1"/>
+            <ImageButton
+                    android:id="@+id/edit_description_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_edit_24dp"
+                    android:layout_weight="1"
+                    android:background="@color/White"/>
 
-        />
-
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_description"
+                android:id="@+id/edit_price">
 
         <EditText
                 android:id="@+id/product_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_description"
                 android:inputType="number"
                 android:digits="0123456789"
                 android:layout_marginTop="6dp"
                 android:padding="20dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-
-        />
+                android:layout_marginStart="45dp"
+                android:layout_weight="1"/>
+        <ImageButton
+                android:id="@+id/edit_price_btn"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit_24dp"
+                android:layout_weight="1"
+                android:background="@color/White"/>
+        </LinearLayout>
 
 
         <Button
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_price"
+                android:layout_below="@+id/edit_price"
                 android:text="Save"
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"

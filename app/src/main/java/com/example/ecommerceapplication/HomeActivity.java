@@ -2,14 +2,15 @@ package com.example.ecommerceapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
-import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.Products;
 import com.example.ecommerceapplication.Model.Users;
-import com.example.ecommerceapplication.ViewHolder.ProductViewHolder;
+import com.example.ecommerceapplication.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,12 +22,9 @@ import io.paperdb.Paper;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private DatabaseReference ProductsRef, ProductsRef2;
-    private RecyclerView recyclerView, recyclerViewDeal;
+    private DatabaseReference ProductsRef;
+    private RecyclerView recyclerView;
     private Users user;
-    private FloatingActionButton floatingActionButton;
-    private RecyclerView.LayoutManager layoutManager, layoutManagerDeal;
-    private Query productQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +32,13 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_page);
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        //ProductsRef2 = FirebaseDatabase.getInstance().getReference().child("Orders").child("333");
-        productQuery = ProductsRef.orderByChild("category");
-                //.startAt("Female Dresses")
-                //.endAt("Female Dresses");
         Paper.init(this);
         user = Paper.book().read("userDetail");
-        //TODO update role in db
         if (user.getRole() == null) {
             user.setRole("");
         }
 
-        floatingActionButton = findViewById(R.id.fab);
+        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,14 +54,8 @@ public class HomeActivity extends AppCompatActivity {
         //item layout
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        //TODO deal layout
-//        recyclerViewDeal = findViewById(R.id.recycler_menu_deals);
-//        recyclerViewDeal.setHasFixedSize(true);
-//        layoutManagerDeal = new LinearLayoutManager(this);
-//        recyclerViewDeal.setLayoutManager(layoutManagerDeal);
 
     }
 
@@ -88,8 +75,6 @@ public class HomeActivity extends AppCompatActivity {
 
         setNotificationBadge();
 
-
-        //setDealData();
     }
 
     private void setNotificationBadge() {
@@ -99,8 +84,10 @@ public class HomeActivity extends AppCompatActivity {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    TextView textView = findViewById(R.id.notification_badge);
+                    textView.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                    Log.d("main", "onDataChange: " + dataSnapshot.getChildrenCount());
                 if (!dataSnapshot.exists()){
-                    ImageView textView = findViewById(R.id.notification_badge);
                     textView.setVisibility(View.GONE);
                 }
             }
@@ -114,50 +101,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private void setDealData() {
-        FirebaseRecyclerOptions<Products> options2 =
-                new FirebaseRecyclerOptions.Builder<Products>()
-                        .setQuery(ProductsRef2, Products.class)
-                        .build();
-
-
-        FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter2 =
-                new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options2) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model) {
-                        holder.txtProductName.setText(model.getPname());
-                        //holder.txtProductDescription.setText(model.getDescription());
-                        holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
-                        Picasso.get().load(model.getImage()).into(holder.imageView);
-                        holder.imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (user.getRole().equals("Admin")){
-
-                                    Intent intent = new Intent(HomeActivity.this, EditActivity.class);
-                                    intent.putExtra("pId", model.getPid());
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(HomeActivity.this, AddToCartActivity.class);
-                                    intent.putExtra("pId", model.getPid());
-                                    startActivity(intent);
-                                }
-
-                            }
-                        });
-                    }
-
-                    @NonNull
-                    @Override
-                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
-                        return new ProductViewHolder(view);
-                    }
-                };
-        recyclerViewDeal.setAdapter(adapter2);
-        adapter2.startListening();
-    }
-
     private void setProductData() {
 
         FirebaseRecyclerOptions<Products> options =
@@ -166,13 +109,14 @@ public class HomeActivity extends AppCompatActivity {
                         .build();
 
 
-        FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
+        FirebaseRecyclerAdapter<Products, OrderViewHolder> adapter =
+                new FirebaseRecyclerAdapter<Products, OrderViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model) {
+                    protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Products model) {
                         holder.txtProductName.setText(model.getPname());
-                        //holder.txtProductDescription.setText(model.getDescription());
-                        holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
+                        holder.txtProductPrice.setText("$" + Integer.parseInt(model.getPrice()) * 1.2);
+                        //holder.txtProductPrice.set(R.drawable.line);
+                        holder.txtProductQuantity.setText("$" + model.getPrice());
                         Picasso.get().load(model.getImage()).into(holder.imageView);
                         holder.imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -194,9 +138,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     @NonNull
                     @Override
-                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
-                        return new ProductViewHolder(view);
+                    public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_layout, parent, false);
+                        return new OrderViewHolder(view);
                     }
                 };
         recyclerView.setAdapter(adapter);

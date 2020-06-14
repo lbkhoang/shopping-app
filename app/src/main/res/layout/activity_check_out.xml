@@ -14,6 +14,13 @@
             android:layout_height="wrap_content">
 
         <TextView
+                android:text="You will paid:"
+                android:paddingStart="20dp"
+                android:textColor="#e00000"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <TextView
                 android:id="@+id/edtAmount"
                 android:text="Amount"
                 android:textAlignment="center"
@@ -21,15 +28,50 @@
                 android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
+        <TextView
+                android:text="Delivery Information:"
+                android:paddingStart="20dp"
+                android:textColor="#e00000"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <TextView
+                android:id="@+id/address"
+                android:text="Address"
+                android:textAlignment="center"
+                android:textColor="#e00000"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <TextView
+                android:text="Your Note:"
+                android:paddingStart="20dp"
+                android:textColor="#e00000"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <EditText
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="Note"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
         <Button
+                android:layout_marginTop="30dp"
                 android:id="@+id/btnPayNow"
-                android:text="Pay Now"
+                android:text="Pay Now With PayPal"
+                android:layout_marginHorizontal="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         <Button
                 android:id="@+id/btnPayLater"
                 android:text="Pay on delivery"
+                android:layout_marginHorizontal="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>

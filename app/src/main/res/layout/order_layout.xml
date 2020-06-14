@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="20dp"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="15dp"
-    app:cardElevation="15dp">
-
-<RelativeLayout
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="20dp"
+            android:layout_weight="1">
 
     <TextView
             android:id="@+id/order_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/product_image"
             android:text="Order Name"
             android:textAlignment="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/common_google_signin_btn_text_light_default"
     />
@@ -29,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/order_name"
+            android:layout_toEndOf="@+id/product_image"
             android:text="Total cost"
             android:textAlignment="center"
             android:textSize="18sp"
@@ -40,12 +40,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/order_cost"
+            android:layout_toEndOf="@+id/product_image"
             android:text="Date"
             android:textAlignment="center"
-            android:textSize="16sp"
-            android:textColor="@color/common_google_signin_btn_text_light_default"
-    />
-
-
+            android:textSize="16sp"/>
+    <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

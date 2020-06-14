@@ -14,53 +14,47 @@
             android:layout_height="match_parent">
 
         <TextView
-                android:id="@+id/product_name"
+                android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Product Name"
-                android:layout_toRightOf="@id/product_image"
+                android:text="User Name"
+                android:layout_toRightOf="@id/user_image"
                 android:paddingLeft="5dp"
                 android:textSize="20dp"
                 android:textStyle="bold"
         />
 
         <ImageView
-                android:id="@+id/product_image"
+                android:id="@+id/user_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:background="@color/Gray"
+                android:src="@drawable/ic_account_circle_24dp"/>
 
         <TextView
-                android:id="@+id/product_price"
-                android:layout_width="match_parent"
+                android:id="@+id/user_status"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/product_image"
-                android:layout_below="@id/product_name"
-                android:text="Product Price"
+                android:layout_toRightOf="@+id/user_image"
+                android:layout_below="@id/user_name"
+                android:text="Online"
                 android:paddingLeft="5dp"
-                android:textSize="18sp"
+                android:textSize="18dp"
         />
 
         <TextView
-                android:id="@+id/product_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/product_price"
-                android:layout_toRightOf="@id/product_image"
-                android:paddingLeft="5dp"
-                android:textSize="16dp"/>
-        <TextView
-                android:id="@+id/product_rating"
+                android:id="@+id/user_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_quantity"
-                android:layout_toRightOf="@id/product_image"
-                android:text="4.5 ★"
-                android:paddingLeft="5dp"
+                android:layout_below="@+id/user_status"
                 android:textColor="@color/White"
                 android:background="@drawable/rating"
-                android:layout_marginLeft="5dp"
-                android:textSize="16dp"/>
+                android:layout_toRightOf="@id/user_image"
+                android:text="Product Quantity"
+                android:paddingLeft="5dp"
+                android:textSize="16sp"/>
+
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -50,7 +50,7 @@ public class AddToCartActivity extends AppCompatActivity {
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int prdPrice = Integer.parseInt(txtProductPrice.getText().toString());
+                int prdPrice = Integer.parseInt(productsData.getPrice());
                 int value = Integer.parseInt(txtQuantity.getText().toString());
                 value = value + 1;
                 txtQuantity.setText(Integer.toString(value));
@@ -61,7 +61,7 @@ public class AddToCartActivity extends AppCompatActivity {
         decreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int prdPrice = Integer.parseInt(txtProductPrice.getText().toString());
+                int prdPrice = Integer.parseInt(productsData.getPrice());
                 int value = Integer.parseInt(txtQuantity.getText().toString());
                 if (value != 0) {
                     value = value - 1;
@@ -147,7 +147,7 @@ public class AddToCartActivity extends AppCompatActivity {
                 productsData = dataSnapshot.getValue(Products.class);
                 txtProductName.setText(productsData.getPname());
                 txtProductDescription.setText(productsData.getDescription());
-                txtProductPrice.setText(productsData.getPrice());
+                txtProductPrice.setText("Price: $" + productsData.getPrice());
                 Picasso.get().load(productsData.getImage()).into(imageView);
 
             }

@@ -1,17 +1,23 @@
 package com.example.ecommerceapplication.Model;
 
 public class Orders {
-    private String pid, pname, price, quantity, discount;
+    private String pid;
+    private String pname;
+    private String price;
+    private String quantity;
+    private String discount;
+    private String image;
 
     public Orders() {
     }
 
-    public Orders(String pid, String pname, String price, String quantity, String discount) {
+    public Orders(String pid, String pname, String price, String quantity, String discount,String image) {
         this.pid = pid;
         this.pname = pname;
         this.price = price;
         this.quantity = quantity;
         this.discount = discount;
+        this.image = image;
     }
 
     public String getPid() {
@@ -52,5 +58,13 @@ public class Orders {
 
     public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

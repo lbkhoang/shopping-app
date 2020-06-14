@@ -1,6 +1,9 @@
 package com.example.ecommerceapplication;
 
+import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +13,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.example.ecommerceapplication.Model.Config;
-import com.example.ecommerceapplication.Model.Orders;
-import com.example.ecommerceapplication.Model.Products;
-import com.example.ecommerceapplication.Model.Users;
+import com.example.ecommerceapplication.Model.*;
 import com.google.firebase.database.*;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -41,11 +40,11 @@ public class CheckOutActivity extends AppCompatActivity {
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Config.PAYPAL_CLIENT_ID);
 
-    private Button btnPayNow;
-    private TextView edtAmount;
+    private TextView edtAmount, address;
+    private EditText note;
     private String amount = "";
+    private String count;
     private Map<String,Object> orderData;
-
     private Users user;
 
     @Override
@@ -69,9 +68,15 @@ public class CheckOutActivity extends AppCompatActivity {
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
         startService(intent);
 
-        btnPayNow = findViewById(R.id.btnPayNow);
+        Button btnPayNow = findViewById(R.id.btnPayNow);
+        Button btnPayLater = findViewById(R.id.btnPayLater);
         edtAmount = findViewById(R.id.edtAmount);
 
+        address = findViewById(R.id.address);
+
+        note = findViewById(R.id.note);
+
+        //addChildObserver();
 
         edtAmount.setText(amount);
 
@@ -81,11 +86,26 @@ public class CheckOutActivity extends AppCompatActivity {
                 processPayment();
             }
         });
+        btnPayLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String a = address.getText().toString();
+                if ("".equals(a)) {
+                    Toast.makeText(CheckOutActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveOrder("COD Shipment");
+                    Intent intent = new Intent(CheckOutActivity.this, PaymentDetailActivity.class);
+                    intent.putExtra("apiRespond", count).putExtra("amount",amount);
+                    startActivity(intent);
+                    finish();
+                    delCart();
+                }
+            }
+        });
+    }
 
-        orderData = new HashMap<>();
-        orderData.put("note", "No Sugar");
-        orderData.put("cost", amount);
-
+    private void delCart() {
+        //TODO del cart
     }
 
     private void processPayment() {
@@ -113,6 +133,7 @@ public class CheckOutActivity extends AppCompatActivity {
                         startActivity(new Intent(this,PaymentDetailActivity.class)
                                 .putExtra("apiRespond", apiRespond)
                                 .putExtra("amount",amount));
+                        finish();
                         saveOrder(apiRespond);
                     } catch (JSONException e){
                         e.printStackTrace();
@@ -127,23 +148,57 @@ public class CheckOutActivity extends AppCompatActivity {
     private void saveOrder(final String apiRespond) {
         final DatabaseReference OrderRef = FirebaseDatabase.getInstance().getReference();
         final Orders orders = new Orders();
+
+        amount = edtAmount.getText().toString();
+        amount = amount.replace("Total: $", "");
+
+        orderData = new HashMap<>();
+        orderData.put("note", note.getText().toString() == null ? "" : note.getText().toString());
+        orderData.put("address", address.getText() == null ? "" : note.getText().toString());
+        orderData.put("cost", amount);
+        getOrderCount();
+
+
+
         OrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String key = getDate() + " - " + getTime();
                 for (DataSnapshot snapshot : dataSnapshot.child("Orders").child(user.getPhone()).getChildren()) {
                     Products product = snapshot.getValue(Products.class);
                     orders.setPname(product.getPname());
                     orders.setPrice(product.getPrice());
                     orders.setQuantity(product.getQuantity());
-                    OrderRef.child("ConfirmedOrder").child(apiRespond).child("Product").child(product.getPid())
+                    orders.setImage(product.getImage());
+                    OrderRef.child("ConfirmedOrder").child(key).child("Product").child(product.getPid())
                             .getRef().setValue(orders);
                 }
+                Log.d("TAG: orderid", "onDataChange: ");
+                orderData.put("userId", user.getPhone());
+                orderData.put("payMethod", "PayPal id: " + apiRespond);
+                orderData.put("date", getDate());
+                orderData.put("time", getTime());
+                OrderRef.child("ConfirmedOrder").child(key).updateChildren(orderData);
+            }
 
-                    orderData.put("userId", user.getPhone());
-                    orderData.put("orderId", apiRespond);
-                    orderData.put("date", getDate());
-                    orderData.put("time", getTime());
-                    OrderRef.child("ConfirmedOrder").child(apiRespond).updateChildren(orderData);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getOrderCount() {
+        Query query = FirebaseDatabase.getInstance().getReference().child("ConfirmedOrder");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long l = dataSnapshot.getChildrenCount();
+                Log.d("TAG1", "onDataChange: " + l);
+                l += 1;
+                count = String.valueOf(l);
+                Log.d("TAG1", "onchildadded: " + count);
+                orderData.put("orderId", count);
             }
 
             @Override

@@ -1,6 +1,7 @@
 package com.example.ecommerceapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.Users;
 import com.example.ecommerceapplication.ViewHolder.OrderViewHolder;
+import com.example.ecommerceapplication.ViewHolder.UserViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -72,18 +74,19 @@ public class UserChatActivity extends AppCompatActivity {
                         .setQuery(userRef, Users.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Users, OrderViewHolder> adapter = new FirebaseRecyclerAdapter<Users, OrderViewHolder>(options) {
+        FirebaseRecyclerAdapter<Users, UserViewHolder> adapter = new FirebaseRecyclerAdapter<Users, UserViewHolder>(options) {
             @NonNull
             @Override
-            public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items_layout, parent, false);
-                return new OrderViewHolder(view);
+            public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_layout, parent, false);
+                return new UserViewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Users model) {
-                holder.txtProductName.setText(model.getName());
-                Picasso.get().load("https://imgur.com/gallery/YZlcj").into(holder.imageView);
+            protected void onBindViewHolder(@NonNull UserViewHolder holder, int position, @NonNull final Users model) {
+                holder.txtUserName.setText(model.getName());
+                //Picasso.get().load("https://imgur.com/gallery/YZlcj").into(holder.imageView);
+                holder.txtUserDescription.setText("2.5 ★");
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -15,9 +15,14 @@
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/deal"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_menu"
                 android:layout_width="match_parent"
@@ -60,14 +65,17 @@
             android:textColor="#FFFFFF"
             android:visibility="gone"
             android:text="10"/>
-    <ImageView
+    <TextView
             android:id="@+id/notification_badge"
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:layout_anchor="@id/circle"
             app:layout_anchorGravity="start|bottom"
             android:visibility="visible"
-            android:src="@drawable/circle"
-            android:elevation="17dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/White"
+            android:textAlignment="center"
+            android:background="@drawable/circle"
+            android:elevation="19dp"
             android:textStyle="bold"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

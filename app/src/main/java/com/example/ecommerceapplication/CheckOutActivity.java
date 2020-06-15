@@ -93,7 +93,7 @@ public class CheckOutActivity extends AppCompatActivity {
                 if ("".equals(a)) {
                     Toast.makeText(CheckOutActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
                 } else {
-                    saveOrder("COD Shipment");
+                    saveOrder("COD");
                     Intent intent = new Intent(CheckOutActivity.this, PaymentDetailActivity.class);
                     intent.putExtra("apiRespond", count).putExtra("amount",amount);
                     startActivity(intent);
@@ -134,7 +134,7 @@ public class CheckOutActivity extends AppCompatActivity {
                                 .putExtra("apiRespond", apiRespond)
                                 .putExtra("amount",amount));
                         finish();
-                        saveOrder(apiRespond);
+                        saveOrder("PayPal");
                     } catch (JSONException e){
                         e.printStackTrace();
                     }
@@ -173,9 +173,8 @@ public class CheckOutActivity extends AppCompatActivity {
                     OrderRef.child("ConfirmedOrder").child(key).child("Product").child(product.getPid())
                             .getRef().setValue(orders);
                 }
-                Log.d("TAG: orderid", "onDataChange: ");
                 orderData.put("userId", user.getPhone());
-                orderData.put("payMethod", "PayPal id: " + apiRespond);
+                orderData.put("payMethod", apiRespond);
                 orderData.put("date", getDate());
                 orderData.put("time", getTime());
                 OrderRef.child("ConfirmedOrder").child(key).updateChildren(orderData);

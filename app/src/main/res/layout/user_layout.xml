@@ -38,6 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/user_image"
                 android:layout_below="@id/user_name"
+                android:textColor="@color/White"
+                android:background="@drawable/rating"
                 android:text="Online"
                 android:paddingLeft="5dp"
                 android:textSize="18dp"
@@ -48,13 +50,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_status"
-                android:textColor="@color/White"
-                android:background="@drawable/rating"
                 android:layout_toRightOf="@id/user_image"
                 android:text="Product Quantity"
                 android:paddingLeft="5dp"
                 android:textSize="16sp"/>
-
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

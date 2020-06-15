@@ -53,14 +53,13 @@
 
         <ImageButton
                 android:id="@+id/product_remove"
-                android:layout_width="50dp"
+                android:layout_width="20dp"
                 android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:scaleY="0.5"
-                android:scaleX="0.5"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"
                 android:background="@color/White"
                 android:layout_weight="1"
-                android:src="@drawable/ic_delete_forever_black_24dp"
+                android:src="@drawable/ic_delete_24dp"
         />
 
     </LinearLayout>

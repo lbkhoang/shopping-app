@@ -2,20 +2,36 @@ package com.example.ecommerceapplication.Model;
 
 public class Users
 {
-    private String name, phone, password, image, address, role;
+    private String name;
+    private String phone;
+    private String password;
+    private String image;
+    private String address;
+    private String role;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
 
     public Users()
     {
 
     }
 
-    public Users(String name, String phone, String password, String image, String address, String role) {
+    public Users(String name, String phone, String password, String image, String address, String role, String description) {
         this.name = name;
         this.phone = phone;
         this.password = password;
         this.image = image;
         this.address = address;
         this.role = role;
+        this.description = description;
     }
 
 

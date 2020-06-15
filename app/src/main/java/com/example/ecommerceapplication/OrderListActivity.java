@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.ecommerceapplication.Model.ConfirmedOrder;
 import com.example.ecommerceapplication.Model.OrderList;
 import com.example.ecommerceapplication.ViewHolder.OrderListViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -39,12 +40,13 @@ public class OrderListActivity extends AppCompatActivity {
     }
 
     private void loadOrderData() {
-        FirebaseRecyclerOptions<OrderList> options =
-                new FirebaseRecyclerOptions.Builder<OrderList>()
-                        .setQuery(OrderRef, OrderList.class)
+        FirebaseRecyclerOptions<ConfirmedOrder> options =
+                new FirebaseRecyclerOptions.Builder<ConfirmedOrder>()
+                        .setQuery(OrderRef, ConfirmedOrder.class)
                         .build();
 
-        FirebaseRecyclerAdapter<OrderList, OrderListViewHolder> adapter = new FirebaseRecyclerAdapter<OrderList, OrderListViewHolder>(options) {
+        FirebaseRecyclerAdapter<ConfirmedOrder, OrderListViewHolder> adapter =
+                new FirebaseRecyclerAdapter<ConfirmedOrder, OrderListViewHolder>(options) {
             @NonNull
             @Override
             public OrderListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,15 +55,16 @@ public class OrderListActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull OrderListViewHolder holder, int position, @NonNull final OrderList model) {
-                holder.txtOrderName.setText(model.getNote());
-                holder.txtOrderCost.setText(model.getOrderId());
+            protected void onBindViewHolder(@NonNull OrderListViewHolder holder, int position, @NonNull final ConfirmedOrder model) {
+                holder.txtOrderName.setText("Order Number " + model.getOrderId());
+                holder.txtOrderCost.setText("$" + model.getCost() + " - " + model.getPayMethod());
+                holder.txtOrderDate.setText("Date: " + model.getDate() + " - " + model.getTime());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
-                        intent.putExtra("orderId", model.getOrderId());
+                        intent.putExtra("orderId", model.getDate() + " - " + model.getTime());
                         startActivity(intent);
                     }
                 });

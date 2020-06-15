@@ -1,36 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:fitsSystemWindows="true">
+    <TextView
+            android:id="@+id/order_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textSize="20sp"
+            android:text="Order Name"/>
+    <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:paddingBottom="20dp"
+            android:layout_below="@id/order_name"
+            android:background="@android:color/darker_gray"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
+            android:layout_below="@+id/line2"
+            android:layout_above="@id/order_detail"
+            android:scrollbars="vertical"/>
+    <LinearLayout
+            android:id="@+id/order_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            style="@style/Widget.MaterialComponents.BottomAppBar"
-            app:hideOnScroll="true"
-            app:backgroundTint="@color/cardview_dark_background"
-            app:fabAlignmentMode="end"
-            app:fabCradleMargin="16dp"
-            app:menu="@menu/home"
-            app:fabCradleRoundedCornerRadius="30dp"/>
+            android:layout_height="200dp"
+            android:paddingStart="20dp"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_home_black_24dp"
-            app:layout_anchor="@id/bottom_app_bar"/>
+        <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="10dp"
+                android:paddingBottom="20dp"
+                android:background="@android:color/darker_gray"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+                android:id="@+id/total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/Red"
+                android:gravity="end"
+                android:paddingEnd="5dp"
+                android:text="ship add"/>
+        <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ship add"/>
+        <TextView
+                android:id="@+id/note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ship add"/>
+        <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ship add"/>
+        <TextView
+                android:id="@+id/pay_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ship add"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

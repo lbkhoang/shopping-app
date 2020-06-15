@@ -6,7 +6,6 @@ public class Users
     private String phone;
     private String password;
     private String image;
-    private String address;
     private String role;
 
     public String getDescription() {
@@ -24,12 +23,11 @@ public class Users
 
     }
 
-    public Users(String name, String phone, String password, String image, String address, String role, String description) {
+    public Users(String name, String phone, String password, String image, String role, String description) {
         this.name = name;
         this.phone = phone;
         this.password = password;
         this.image = image;
-        this.address = address;
         this.role = role;
         this.description = description;
     }
@@ -65,14 +63,6 @@ public class Users
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getRole() {

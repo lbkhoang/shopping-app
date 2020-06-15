@@ -11,39 +11,23 @@
 
     <ImageView
             android:id="@+id/select_product_image"
-            android:paddingTop="30dp"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:cropToPadding="false"
-            android:scaleType="centerInside"
-            android:src="@drawable/camera"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_account_circle_24dp"
+            android:background="@color/Gray"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-    />
-
-
-    <EditText
-            android:id="@+id/user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_product_image"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="20dp"
-            android:padding="20dp"
-            android:hint="User Name..."
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-
-    />
+            android:layout_marginTop="10dp"/>
 
 
     <EditText
             android:id="@+id/user_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_name"
+            android:layout_below="@+id/select_product_image"
             android:inputType="textMultiLine"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="20dp"
             android:padding="20dp"
             android:hint="Address..."
             android:layout_marginLeft="45dp"
@@ -53,15 +37,29 @@
 
 
     <EditText
-            android:id="@+id/product_price"
+            android:id="@+id/user_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_address"
-            android:inputType="number"
-            android:digits="0123456789"
+            android:inputType="textMultiLine"
             android:layout_marginTop="6dp"
             android:padding="20dp"
-            android:hint="Product Price..."
+            android:hint="City..."
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+
+    />
+
+
+    <EditText
+            android:id="@+id/user_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_city"
+            android:inputType="text"
+            android:layout_marginTop="6dp"
+            android:padding="20dp"
+            android:hint="State..."
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
 
@@ -72,7 +70,7 @@
             android:id="@+id/save_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/product_price"
+            android:layout_below="@+id/user_state"
             android:text="Save"
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"

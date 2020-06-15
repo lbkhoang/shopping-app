@@ -48,7 +48,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         setOnClick();
 
-
     }
 
     private void setOnClick() {
@@ -64,7 +63,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showConfirmDialog("Log Out", "Are you sure you want Log Out?");
+            }
+        });
 
+        txtAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, SettingActivity.class);
+                startActivity(intent);
             }
         });
     }

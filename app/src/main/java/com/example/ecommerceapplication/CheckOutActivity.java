@@ -1,6 +1,8 @@
 package com.example.ecommerceapplication;
 
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +16,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapplication.Model.*;
+import com.example.ecommerceapplication.ViewHolder.OrderViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.*;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -22,6 +29,7 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
+import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,12 +48,15 @@ public class CheckOutActivity extends AppCompatActivity {
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Config.PAYPAL_CLIENT_ID);
 
-    private TextView edtAmount, address;
-    private EditText note;
+    private DatabaseReference OrderRef;
+
+    private TextView edtAmount, name;
+    private EditText note, address;
     private String amount = "";
     private String count;
     private Map<String,Object> orderData;
     private Users user;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onDestroy() {
@@ -56,12 +67,14 @@ public class CheckOutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_out);
+        setContentView(R.layout.check_out_detail);
 
         Paper.init(this);
         user = Paper.book().read("userDetail");
 
         amount = getIntent().getStringExtra("amount");
+
+        OrderRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(user.getPhone());
 
         //start paypal service
         Intent intent = new Intent(this,PayPalService.class);
@@ -70,28 +83,40 @@ public class CheckOutActivity extends AppCompatActivity {
 
         Button btnPayNow = findViewById(R.id.btnPayNow);
         Button btnPayLater = findViewById(R.id.btnPayLater);
-        edtAmount = findViewById(R.id.edtAmount);
 
+        edtAmount = findViewById(R.id.total);
         address = findViewById(R.id.address);
-
         note = findViewById(R.id.note);
+        name = findViewById(R.id.user_name);
 
-        //addChildObserver();
+        recyclerView = findViewById(R.id.recycler_menu);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         edtAmount.setText(amount);
+        name.setText(user.getName());
+
+        loadOrderProductData();
 
         btnPayNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processPayment();
+                String a = address.getText().toString();
+                if (validateInfo(a)) {
+                    Toast.makeText(CheckOutActivity.this, "Invalid Address", Toast.LENGTH_SHORT).show();
+                } else {
+                    processPayment();
+                    delCart();
+                }
             }
         });
         btnPayLater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String a = address.getText().toString();
-                if ("".equals(a)) {
-                    Toast.makeText(CheckOutActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+                if (validateInfo(a)) {
+                    Toast.makeText(CheckOutActivity.this, "Invalid Address", Toast.LENGTH_SHORT).show();
                 } else {
                     saveOrder("COD");
                     Intent intent = new Intent(CheckOutActivity.this, PaymentDetailActivity.class);
@@ -102,10 +127,15 @@ public class CheckOutActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void delCart() {
         //TODO del cart
+    }
+
+    private boolean validateInfo(String a) {
+        return "".equals(a);
     }
 
     private void processPayment() {
@@ -154,7 +184,7 @@ public class CheckOutActivity extends AppCompatActivity {
 
         orderData = new HashMap<>();
         orderData.put("note", note.getText().toString() == null ? "" : note.getText().toString());
-        orderData.put("address", address.getText() == null ? "" : note.getText().toString());
+        orderData.put("address", address.getText() == null ? "" : address.getText().toString());
         orderData.put("cost", amount);
         getOrderCount();
 
@@ -221,5 +251,34 @@ public class CheckOutActivity extends AppCompatActivity {
         SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
 
         return currentDate.format(calendar.getTime());
+    }
+
+    private void loadOrderProductData() {
+        FirebaseRecyclerOptions<Products> options =
+                new FirebaseRecyclerOptions.Builder<Products>()
+                        .setQuery(OrderRef, Products.class)
+                        .build();
+
+        FirebaseRecyclerAdapter<Products, OrderViewHolder> adapter =
+                new FirebaseRecyclerAdapter<Products, OrderViewHolder>(options) {
+                    @NonNull
+                    @Override
+                    public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_layout, parent, false);
+                        return new OrderViewHolder(view);
+                    }
+
+                    @Override
+                    protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull final Products model) {
+                        int qty = Integer.parseInt(model.getQuantity());
+                        float price = Integer.parseInt(model.getPrice());
+                        holder.txtProductName.setText(qty+ " x " + model.getPname());
+                        Picasso.get().load(model.getImage()).into(holder.imageView);
+                        holder.txtProductPrice.setText("$" + qty*price);
+                    }
+                };
+
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 }

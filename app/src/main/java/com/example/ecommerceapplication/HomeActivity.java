@@ -38,19 +38,6 @@ public class HomeActivity extends AppCompatActivity {
             user.setRole("");
         }
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, EditCartActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        Toolbar toolbar = findViewById(R.id.bottom_app_bar);
-        setSupportActionBar(toolbar);
-
         //item layout
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
@@ -73,31 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
         setProductData();
 
-        setNotificationBadge();
-
-    }
-
-    private void setNotificationBadge() {
-        DatabaseReference dbRef = ProductsRef = FirebaseDatabase.getInstance().getReference()
-                .child("Orders").child(user.getPhone());
-
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    TextView textView = findViewById(R.id.notification_badge);
-                    textView.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                    Log.d("main", "onDataChange: " + dataSnapshot.getChildrenCount());
-                if (!dataSnapshot.exists()){
-                    textView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        setBottomNavBar();
 
     }
 
@@ -147,13 +110,49 @@ public class HomeActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
+
+    private void setBottomNavBar() {
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, EditCartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        Toolbar toolbar = findViewById(R.id.bottom_app_bar);
+        setSupportActionBar(toolbar);
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference()
+                .child("Orders").child(user.getPhone());
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextView textView = findViewById(R.id.notification_badge);
+                textView.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                Log.d("main", "onDataChange: " + dataSnapshot.getChildrenCount());
+                if (!dataSnapshot.exists()){
+                    textView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

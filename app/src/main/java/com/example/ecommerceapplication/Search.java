@@ -1,8 +1,10 @@
 package com.example.ecommerceapplication;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +19,7 @@ import com.example.ecommerceapplication.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.*;
 import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
@@ -36,30 +36,17 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        productQuery = ProductsRef.orderByChild("category")
-        .startAt("Female Dresses")
-        .endAt("Female Dresses");
+
         Paper.init(this);
         user = Paper.book().read("userDetail");
-        //TODO update role in db
         if (user.getRole() == null) {
             user.setRole("");
         }
 
+        setBottomNavBar();
+
         setBtn();
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Search.this, EditCartActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        Toolbar toolbar = findViewById(R.id.bottom_app_bar);
-        setSupportActionBar(toolbar);
 
         //item layout
         recyclerView = findViewById(R.id.recycler_menu);
@@ -206,13 +193,48 @@ public class Search extends AppCompatActivity {
         adapter.startListening();
     }
 
+    private void setBottomNavBar() {
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Search.this, EditCartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        Toolbar toolbar = findViewById(R.id.bottom_app_bar);
+        setSupportActionBar(toolbar);
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference()
+                .child("Orders").child(user.getPhone());
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextView textView = findViewById(R.id.notification_badge);
+                textView.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                Log.d("main", "onDataChange: " + dataSnapshot.getChildrenCount());
+                if (!dataSnapshot.exists()){
+                    textView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -223,22 +245,24 @@ public class Search extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.cart_app_bar:
-                showMsg("cart");
+                intent = new Intent(Search.this, WishList.class);
+                startActivity(intent);
                 return true;
             case R.id.order_app_bar:
                 intent = new Intent(Search.this, OrderListActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.search_app_bar:
-                showMsg("search");
+                intent = new Intent(Search.this, Search.class);
+                startActivity(intent);
+                return true;
+            case R.id.profile_app_bar:
+                intent = new Intent(Search.this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showMsg(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -98,7 +98,6 @@ public class EditActivity extends AppCompatActivity {
         startActivityForResult(galleryIntent, GalleryPick);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -186,7 +185,6 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
-
     private void ValidateProductData() {
         Description = txtProductDescription.getText().toString();
         Price = txtProductPrice.getText().toString();
@@ -202,7 +200,6 @@ public class EditActivity extends AppCompatActivity {
             StoreProductInformation();
         }
     }
-
 
     private void StoreProductInformation() {
         Calendar calendar = Calendar.getInstance();
@@ -269,7 +266,6 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
-
     private void SaveProductInfoToDatabase() {
         final HashMap<String, Object> productMap = new HashMap<>();
         productMap.put("description", Description);
@@ -283,11 +279,11 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(EditActivity.this, HomeActivity.class);
-                            startActivity(intent);
-
                             updateProductData(productMap);
                             Toast.makeText(EditActivity.this, "Product Updated...", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(EditActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             String message = task.getException().toString();
                             Toast.makeText(EditActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();

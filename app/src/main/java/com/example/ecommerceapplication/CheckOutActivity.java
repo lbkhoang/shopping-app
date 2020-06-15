@@ -161,7 +161,7 @@ public class CheckOutActivity extends AppCompatActivity {
                         JSONObject paymentDetails = confirmation.toJSONObject();
                         apiRespond = paymentDetails.getJSONObject("response").get("id").toString();
                         startActivity(new Intent(this,PaymentDetailActivity.class)
-                                .putExtra("apiRespond", apiRespond)
+                                .putExtra("apiRespond", count)
                                 .putExtra("amount",amount));
                         finish();
                         saveOrder("PayPal");

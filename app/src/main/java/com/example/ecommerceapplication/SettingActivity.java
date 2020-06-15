@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.example.ecommerceapplication.Model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.*;
+import com.squareup.picasso.Picasso;
 import io.paperdb.Paper;
 
 import java.util.HashMap;
@@ -35,6 +37,8 @@ public class SettingActivity extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference()
                         .child("user").child(user.getPhone()).child("address");
 
+        ImageView imageView = findViewById(R.id.user_image);
+        Picasso.get().load(user.getImage()).into(imageView);
         txtUserState = findViewById(R.id.user_state);
         txtUserAddress = findViewById(R.id.user_address);
         txtUserCity = findViewById(R.id.user_city);

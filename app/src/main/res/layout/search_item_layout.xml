@@ -19,7 +19,6 @@
                 android:layout_height="wrap_content"
                 android:text="Product Name"
                 android:layout_toRightOf="@id/product_image"
-                android:layout_toLeftOf="@id/remove_btn"
                 android:paddingLeft="5dp"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -36,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/product_image"
-                android:layout_toLeftOf="@id/remove_btn"
                 android:layout_below="@id/product_name"
                 android:text="Product Price"
                 android:paddingLeft="5dp"
@@ -49,7 +47,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/product_price"
                 android:layout_toRightOf="@id/product_image"
-                android:layout_toLeftOf="@id/remove_btn"
                 android:paddingLeft="5dp"
                 android:textSize="16dp"/>
         <TextView
@@ -64,13 +61,5 @@
                 android:background="@drawable/rating"
                 android:layout_marginLeft="5dp"
                 android:textSize="16dp"/>
-        <ImageButton
-                android:id="@+id/remove_btn"
-                android:layout_width="50dp"
-                android:layout_height="100dp"
-                android:scaleType="fitCenter"
-                android:background="@color/White"
-                android:src="@drawable/ic_delete_forever_black_24dp"
-                android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,7 @@
 package com.example.ecommerceapplication.ViewHolder;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import com.example.ecommerceapplication.R;
 public class OrderViewHolder extends RecyclerView.ViewHolder {
     public TextView txtProductName, txtProductQuantity, txtProductPrice;
     public ImageView imageView;
+    public ImageButton imageButton;
 
 
     public OrderViewHolder(View itemView)
@@ -20,5 +22,6 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
         txtProductName = itemView.findViewById(R.id.product_name);
         txtProductQuantity = itemView.findViewById(R.id.product_quantity);
         txtProductPrice = itemView.findViewById(R.id.product_price);
+        imageButton = itemView.findViewById(R.id.remove_btn);
     }
 }

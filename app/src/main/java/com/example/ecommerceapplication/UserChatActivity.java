@@ -72,23 +72,29 @@ public class UserChatActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull UserViewHolder holder, int position, @NonNull final Users model) {
+                final Intent intent = new Intent(UserChatActivity.this, ChatActivity.class);
                 String img = model.getImage();
+                intent.putExtra("userId", model.getPhone())
+                    .putExtra("name", model.getName());
                 String des = model.getDescription();
                 if (img != null) {
+                    intent.putExtra("img", img);
                     Picasso.get().load(img).into(holder.imageView);
+                } else {
+                    intent.putExtra("img", "");
                 }
 
                 if (des != null) {
                     holder.txtUserDescription.setText(des);
+                    intent.putExtra("des", des);
                 } else {
                     holder.txtUserDescription.setText("");
+                    intent.putExtra("des", "");
                 }
                 holder.txtUserName.setText(model.getName());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(UserChatActivity.this, ChatActivity.class);
-                        intent.putExtra("userId", model.getPhone());
                         startActivity(intent);
                     }
                 });

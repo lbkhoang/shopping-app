@@ -29,6 +29,7 @@ public class Search extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Users user;
     private Query productQuery;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+
+        textView = findViewById(R.id.info_text);
 
         Paper.init(this);
         user = Paper.book().read("userDetail");
@@ -57,6 +60,7 @@ public class Search extends AppCompatActivity {
     }
 
     private Query setQuery(String query) {
+        textView.setText("Showing product in " + query);
         return productQuery = ProductsRef.orderByChild("category").startAt(query).endAt(query);
     }
 
@@ -185,7 +189,7 @@ public class Search extends AppCompatActivity {
                     @NonNull
                     @Override
                     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items_layout, parent, false);
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_layout, parent, false);
                         return new OrderViewHolder(view);
                     }
                 };

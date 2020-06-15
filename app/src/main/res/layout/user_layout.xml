@@ -39,9 +39,9 @@
                 android:layout_toRightOf="@+id/user_image"
                 android:layout_below="@id/user_name"
                 android:textColor="@color/White"
-                android:background="@drawable/rating"
+                android:background="@drawable/online"
                 android:text="Online"
-                android:paddingLeft="5dp"
+                android:paddingHorizontal="5dp"
                 android:textSize="18dp"
         />
 

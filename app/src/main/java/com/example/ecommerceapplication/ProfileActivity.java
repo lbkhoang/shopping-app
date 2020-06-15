@@ -37,9 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
         txtLogOut = findViewById(R.id.logout);
         txtAdmin = findViewById(R.id.admin);
 
+        View view = findViewById(R.id.admin_linear);
+
         Paper.init(this);
         user = Paper.book().read("userDetail");
-
+        if (user.getRole() == null) {
+            view.setVisibility(View.GONE);
+        }
         if (user.getImage() != null) {
             Picasso.get().load(user.getImage()).into(profilePic);
         }

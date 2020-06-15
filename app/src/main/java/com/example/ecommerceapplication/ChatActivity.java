@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +38,20 @@ public class ChatActivity extends AppCompatActivity {
         String idCombine, currentUserId, userId;
         userId = getIntent().getStringExtra("userId");
         currentUserId = user.getPhone();
+
+
+        String img = getIntent().getStringExtra("img");
+        String des = getIntent().getStringExtra("des");
+        String name = getIntent().getStringExtra("name");
+
+        ImageView imageView = findViewById(R.id.user_image);
+        Picasso.get().load(img).into(imageView);
+
+        TextView txtName = findViewById(R.id.user_name);
+        txtName.setText(name);
+
+        TextView txtDes = findViewById(R.id.user_description);
+        txtDes.setText(des);
 
         idCombine = combineId(userId, currentUserId);
 
